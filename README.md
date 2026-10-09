@@ -167,7 +167,7 @@ is in [`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md).
 | [`docs/ROADMAP.md`](docs/ROADMAP.md) | Phased plan (Phase 0 → Phase 6) |
 | [`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md) | Developer setup, workflow, conventions |
 | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Frontend/3D architecture, data model, integration points |
-| [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) | Staging deployment concept (sub-path, proxy, headers, blockers) |
+| [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) | Deployment concept (login-gated via WordPress, headers, blockers) |
 | [`docs/ASSET_REVIEW.md`](docs/ASSET_REVIEW.md) | Asset inventory, provenance, licence review (pending) |
 | [`docs/THIRD_PARTY_NOTICES.md`](docs/THIRD_PARTY_NOTICES.md) | Upstream origin + third-party components |
 | [`docs/MEDICAL_EDUCATION_SCOPE.md`](docs/MEDICAL_EDUCATION_SCOPE.md) | Educational-only scope and boundaries |

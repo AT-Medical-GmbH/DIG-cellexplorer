@@ -1,19 +1,24 @@
-# Deployment Concept — Staging under a Sub-Path
+# Deployment Concept — Login-gated, served by WordPress
 
-**Status: concept + build support only. Nothing has been deployed.**
-This document prepares a **non-public staging** deployment of DIG-cellexplorer
-under a sub-path of the main AT Medical website (e.g. `/cellexplorer/`). It does
-**not** authorise a public release: the asset review in
-[`ASSET_REVIEW.md`](ASSET_REVIEW.md) must be completed first.
+**Status: prepared, nothing deployed.** The app is delivered under
+`/cellexplorer/` by the AT Medical WordPress site (`ATMED-wordpress`), **only to
+logged-in users**, and embedded in the site layout under *Akademie → Cell Explorer*.
+The implementation lives in `ATMED-wordpress` (`docs/cell-explorer.md`); this
+document keeps the app-side requirements. It does **not** authorise a release: the
+asset review in [`ASSET_REVIEW.md`](ASSET_REVIEW.md) must be completed first.
+
+> **Superseded:** the earlier Traefik-router sketch (§3) is no longer the plan.
+> A proxy rule or a page-level check alone would leave the files reachable by URL;
+> WordPress now checks the session for every file. §3 is kept for reference only.
 
 Decisions taken for this concept:
 
 | Topic | Decision |
 | --- | --- |
-| Audience | Staging only — access-restricted, **not indexed** |
-| Placement | Sub-path of the main site (`/cellexplorer/`) |
-| Execution | AT Medical team deploys; this repo only provides build support and documentation |
-| Assets | Full asset set allowed **only** while the site is access-restricted |
+| Audience | Logged-in website users only, **not indexed** |
+| Placement | Sub-path `/cellexplorer/`, embedded as an iframe on *Akademie → Cell Explorer* |
+| Execution | AT Medical team deploys; code for the site side is in `ATMED-wordpress` |
+| Assets | Logged-in is **not** the same as reviewed: if registration is open, anyone can become a user. Gate on the asset review or restrict by role |
 
 ---
 
@@ -57,7 +62,7 @@ them next to `dist/`. Do not commit them.
 > `modelAsset` (epithelial, muscle) use procedural geometry. Deploy the complete
 > asset set, or fix this first (see §6).
 
-## 3. Reverse proxy (Traefik) — sketch
+## 3. Reverse proxy (Traefik) — sketch (superseded, reference only)
 
 `ATMED-traefik` already provides `secureHeaders` and `authentik-forwardauth`
 middlewares. A sub-path router must out-rank the WordPress router that owns the
@@ -89,9 +94,11 @@ http:
 - The static server must serve `index.html` for `/cellexplorer/` and **serve
   `.glb` as `model/gltf-binary`**. There is no client-side router, so no
   history-API fallback is required.
-- Access restriction: prefer the existing Authentik forward-auth (central, audited)
-  over a shared basic-auth password. This is a **proxy-level** control; the app
-  itself has no authentication and must not get any (out of scope).
+- Access restriction: now done in WordPress (`is_user_logged_in()` per file). The
+  app itself has no authentication and must not get any (out of scope).
+- **Framing:** the site's Traefik label `frameDeny=true` sends
+  `X-Frame-Options: DENY` and blocks the iframe, even same-origin. It must become
+  `SAMEORIGIN` (documented in `ATMED-wordpress/docs/cell-explorer.md`).
 - Large files: the two biggest GLBs are ≈59 MB and ≈56 MB. Enable compression for
   JS/CSS only (GLB/PNG are already compact or incompressible), set long
   `Cache-Control` for hashed `/assets/*`, and check proxy body/timeouts.
