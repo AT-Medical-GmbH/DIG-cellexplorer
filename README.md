@@ -150,10 +150,10 @@ npm run verify           # Playwright visual verification (needs a running dev
 ```
 
 > **Note on 3D assets:** the large GLB models and image assets are **not**
-> committed to this repository (licence review pending). **Without them the app
-> does not start usefully**: a missing GLB currently leaves an empty page (there
-> is no error boundary; verified). Restore the assets from upstream as described
-> in [`docs/ASSET_REVIEW.md`](docs/ASSET_REVIEW.md) before running the app.
+> committed to this repository (licence review pending). Without them the app
+> still runs: a missing model falls back to a simplified procedural view with a
+> notice. For the full-fidelity 3D views, restore the assets from upstream as
+> described in [`docs/ASSET_REVIEW.md`](docs/ASSET_REVIEW.md).
 
 A verified, step-by-step guide (environment, structure, branching, commits, PRs)
 is in [`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md).

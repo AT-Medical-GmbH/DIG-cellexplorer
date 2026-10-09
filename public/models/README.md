@@ -14,7 +14,7 @@ Expected files (referenced by `src/data/cells.ts`):
 | `neuron-nih.glb` (~2.9 MB) | NIH 3D `3DPX-015796` | ⚠️ verify license |
 | `bacteria-wall-nih.glb` (~0.5 MB) | NIH 3D `3DPX-010752` | ⚠️ verify license |
 
-**When a model is missing the app currently shows an empty page** (no error
-boundary; verified). Only specimens without a `modelAsset` use procedural
-geometry. To restore the full-fidelity models for local testing,
+When a model is missing, the app now falls back to that specimen's procedural
+geometry and shows a "3D model unavailable" notice (error boundary in
+`CellScene.tsx`). To restore the full-fidelity models for local testing,
 see "Restoring assets for local testing" in `docs/ASSET_REVIEW.md`.

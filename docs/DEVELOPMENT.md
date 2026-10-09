@@ -161,7 +161,7 @@ Keep commits coherent and reviewable; one logical change per commit.
 
 | Symptom | Likely cause / fix |
 | --- | --- |
-| Completely empty page | A referenced GLB is missing (expected — assets are excluded) and there is no error boundary. Restore assets per `ASSET_REVIEW.md`. |
+| "3D model unavailable" notice, simplified view | The specimen's GLB is missing (expected — assets are excluded). Restore assets per `ASSET_REVIEW.md` for full fidelity. |
 | `npm run verify` cannot find a browser | Set `CHROME_PATH` to a Chrome/Chromium binary. |
 | Build fails on `tsc -b` | A TypeScript error; fix types before building. |
 | Large bundle warnings | Known (Three.js/R3F vendor chunks); addressed in Phase 1/6, not Phase 0. |

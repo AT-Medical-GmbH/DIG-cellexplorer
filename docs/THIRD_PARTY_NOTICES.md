@@ -108,7 +108,10 @@ fonts, additional libraries), add each new third-party component here with:
 name, source/URL, licence, version, and whether attribution/modification/
 commercial use is permitted.
 
-- _(none yet beyond the above)_
+| Component | Source | Licence | Where | Notes |
+| --- | --- | --- | --- | --- |
+| Draco glTF decoder (`draco_decoder.js/.wasm`, `draco_wasm_wrapper.js`) | Google Draco, copied from `three/examples/jsm/libs/draco/gltf/` (three.js r181) | Apache-2.0 | `public/draco/` | Self-hosted instead of `www.gstatic.com`. Licence text: https://github.com/google/draco/blob/master/LICENSE |
+| `studio_small_03_1k.hdr` ("Studio Small 03", Greg Zaal) | Poly Haven, https://polyhaven.com/a/studio_small_03 | CC0 1.0 | `public/hdri/` | Self-hosted instead of `raw.githack.com` (drei preset "studio"). No attribution required; given anyway. |
 
 ---
 

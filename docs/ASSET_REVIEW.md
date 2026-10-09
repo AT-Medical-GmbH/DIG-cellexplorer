@@ -68,6 +68,8 @@ Legend — **Commercial use / Attribution req. / Modification / Replacement need
 | `public/nih-previews/animal-cell-nih.png` (~55 KB) | Preview PNG | NIH 3D `3DPX-015797` | To verify per entry | ? | ? | ? | ? | ⚠️ verify | Preview image for the NIH model; shares the model's terms. |
 | `public/nih-previews/neuron-nih.png` (~23 KB) | Preview PNG | NIH 3D `3DPX-015796` | To verify per entry | ? | ? | ? | ? | ⚠️ verify | As above. |
 | `public/nih-previews/bacteria-wall-nih.png` (~55 KB) | Preview PNG | NIH 3D `3DPX-010752` | To verify per entry | ? | ? | ? | ? | ⚠️ verify | As above. |
+| `public/draco/*` (~750 KB) | Decoder (JS/WASM) | three.js r181 → Google Draco | Apache-2.0 | ✅ | ✅ (licence file/notice) | ✅ | ❌ | ✅ cleared | Added 2026-10-09 to remove the `gstatic.com` runtime request. |
+| `public/hdri/studio_small_03_1k.hdr` (~1.6 MB) | HDRI | Poly Haven, Greg Zaal | CC0 1.0 | ✅ | ❌ | ✅ | ❌ | ✅ cleared | Added 2026-10-09 to remove the `raw.githack.com` runtime request. |
 | `public/favicon.svg` (~0.8 KB) | Icon (SVG) | Upstream | MIT (ships with code) | ✅ | ❌ | ✅ | ❌ | ⚠️ verify | Will be replaced by AT Medical branding later (not in Phase 0). |
 
 ---
@@ -125,8 +127,8 @@ cp -r _upstream/public/texture-references         public/
 # these paths are git-ignored here and will not be committed
 ```
 
-> ⚠️ If a referenced GLB is absent the app currently shows an **empty page** (no
-> error boundary). Restore the full set before running the app.
+> If a referenced GLB is absent, the app falls back to a simplified procedural
+> view with a notice. Restore the full set for the intended fidelity.
 
 ---
 

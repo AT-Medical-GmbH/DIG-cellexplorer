@@ -55,12 +55,10 @@ Verified (Phase 1 prep): the build emits `/cellexplorer/assets/…` and
 For staging, restore the assets into `public/` **before** `npm run build`, or copy
 them next to `dist/`. Do not commit them.
 
-> ⚠️ **A missing GLB breaks the whole page (verified).** The app has no error
-> boundary around model loading. With a sub-path build and no
-> `models/animal-cell-nih.glb`, the browser showed an **empty page** (no UI, no
-> canvas); the animal cell is the default specimen. Only specimens *without* a
-> `modelAsset` (epithelial, muscle) use procedural geometry. Deploy the complete
-> asset set, or fix this first (see §6).
+> ✅ **Missing GLB no longer breaks the page.** An error boundary around the model
+> loader now falls back to the procedural geometry of that specimen and shows a
+> "3D model unavailable" notice (verified in a browser). Deploying the complete
+> asset set is still required for the intended fidelity.
 
 ## 3. Reverse proxy (Traefik) — sketch (superseded, reference only)
 
@@ -103,10 +101,15 @@ http:
   JS/CSS only (GLB/PNG are already compact or incompressible), set long
   `Cache-Control` for hashed `/assets/*`, and check proxy body/timeouts.
 
-## 4. Security headers and third-party requests (blocker)
+## 4. Security headers and third-party requests (resolved)
 
-The app **fetches resources from third parties at runtime** (found by inspecting
-the production bundle):
+**Resolved on this branch:** the Draco decoder (`public/draco/`, Apache-2.0) and
+the studio HDRI (`public/hdri/`, CC0 from Poly Haven) are now shipped with the
+app and loaded from the same origin. A browser smoke test on the sub-path build
+contacts no third-party host. The analysis below is kept for the record.
+
+Originally the app **fetched resources from third parties at runtime** (found by
+inspecting the production bundle):
 
 | Request | Host | Triggered by |
 | --- | --- | --- |
@@ -124,11 +127,10 @@ Consequences:
    to Google and a third-party CDN. For a medical-education product this should
    not be accepted by default.
 
-**Recommendation:** self-host both (copy the Draco decoder files from the `three`
-package into `public/`, point `useGLTF.setDecoderPath` at them; ship the HDRI as a
-licence-cleared local file and use `<Environment files=…>`). Then keep a strict CSP
-with only `blob:`/`data:` additions on a dedicated header middleware for this
-router. Do **not** loosen the shared `secureHeaders` for the whole site.
+**Done:** both are self-hosted (`useGLTF.setDecoderPath`, `<Environment files=…>`).
+Remaining CSP note: Three.js still needs `blob:` (decoded textures) and possibly
+`worker-src blob:`; verify against the final header set. Do **not** loosen the
+shared `secureHeaders` for the whole site.
 Framing: `frame-ancestors 'self'` already allows embedding by same-origin pages.
 
 ## 5. Embedding on the website
@@ -147,8 +149,8 @@ it or embed it with `<iframe src="/cellexplorer/">`. Notes:
 
 - [ ] Asset review complete and signed off (`ASSET_REVIEW.md`); unknown-origin GLBs
       replaced.
-- [ ] Draco decoder and HDRI self-hosted; no third-party runtime requests.
-- [ ] Error boundary / graceful fallback for failed model loads.
+- [x] Draco decoder and HDRI self-hosted; no third-party runtime requests.
+- [x] Error boundary / graceful fallback for failed model loads.
 - [ ] CSP validated in a real browser against the final header set.
 - [ ] Medical-didactic content review (`MEDICAL_EDUCATION_SCOPE.md`).
 - [ ] Privacy statement covers `localStorage` use; DSGVO review.
