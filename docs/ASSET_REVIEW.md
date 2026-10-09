@@ -101,7 +101,8 @@ For any asset that cannot be cleared:
 2. **Unknown user-provided GLBs** — do **not** ship. Replace with:
    (a) a licence-cleared model from an open repository (NIH 3D, BioModels,
    Sketchfab CC), or (b) AT Medical's own modelled/commissioned asset, or
-   (c) procedural Three.js geometry (already supported as fallback).
+   (c) procedural Three.js geometry (exists only for specimens without a
+   `modelAsset`; replacing a GLB this way needs a small code change).
 3. **Rendered & AI-generated images** — regenerate under a tool/licence whose
    output terms AT Medical can evidence, or commission original artwork.
 4. Record every replacement here (old → new, licence, author, date).
@@ -124,8 +125,8 @@ cp -r _upstream/public/texture-references         public/
 # these paths are git-ignored here and will not be committed
 ```
 
-If assets are absent, the app automatically falls back to procedural geometry,
-so the prototype remains runnable without them.
+> ⚠️ If a referenced GLB is absent the app currently shows an **empty page** (no
+> error boundary). Restore the full set before running the app.
 
 ---
 

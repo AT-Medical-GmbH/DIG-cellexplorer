@@ -42,7 +42,7 @@ Goal: prove the prototype runs and renders correctly in a browser.
 - ⬜ Dev server smoke test (`npm run dev`)
 - ⬜ Production build + `npm run preview` smoke test
 - ⬜ Browser smoke test (desktop / compact / mobile layouts)
-- ⬜ 3D rendering validation (GLB load + procedural fallback paths)
+- ⬜ 3D rendering validation (GLB load; add error boundary / fallback for failed model loads)
 - ⬜ Visual verification run (`npm run verify`) with a documented Chrome/Chromium
 - ⬜ Performance baseline (bundle sizes, first 3D frame, large-GLB load time)
 

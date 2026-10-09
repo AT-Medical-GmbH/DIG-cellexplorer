@@ -90,8 +90,13 @@ schema will formalise.
 - **Three.js** via **React Three Fiber** (`@react-three/fiber`) with **Drei**
   helpers (`@react-three/drei`); `meshoptimizer` supports GLB optimisation.
 - Specimens with a `modelAsset` load a **GLB** from `public/models/`; specimens
-  without one (or when the GLB is absent) use **procedural Three.js geometry**
-  as a fallback, so the app remains usable.
+  without one (epithelial, muscle) use **procedural Three.js geometry**. There is
+  **no error boundary**: if a referenced GLB is missing or fails to load, the whole
+  React tree unmounts and the page is empty (verified in a browser, see
+  `DEPLOYMENT.md`).
+- Two **third-party runtime requests** exist: the Draco decoder
+  (`www.gstatic.com`) and the studio HDRI (`raw.githack.com`) — see
+  `DEPLOYMENT.md` §4.
 - A loading overlay covers large-GLB fetches on slow networks.
 - `vite.config.ts` splits the heavy 3D stack into long-cached vendor chunks
   (`three`, and `@react-three/fiber`+`drei` as `r3f`). Built sizes (gzip):

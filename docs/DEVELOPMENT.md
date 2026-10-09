@@ -44,6 +44,7 @@ npm install   # for day-to-day development
 | `npm run dev` | Start Vite dev server at `http://127.0.0.1:5173/` (HMR). |
 | `npm run build` | Type-check (`tsc -b`) then build to `dist/`. |
 | `npm run preview` | Serve the production build locally. |
+| `VITE_BASE_PATH=/cellexplorer/ npm run build` | Build for a sub-path deployment (see [`DEPLOYMENT.md`](DEPLOYMENT.md)); use the same variable for `preview`. |
 | `npm run test:unit` | Run Vitest unit tests. |
 | `npm run test:preflight` | Run Node preflight checks (`scripts/*.test.mjs`). |
 | `npm test` | Unit tests + preflight checks. |
@@ -160,7 +161,7 @@ Keep commits coherent and reviewable; one logical change per commit.
 
 | Symptom | Likely cause / fix |
 | --- | --- |
-| Blank 3D canvas for plant/white-blood/etc. | GLB assets not present (expected — they are excluded). App should fall back to procedural geometry; restore assets per `ASSET_REVIEW.md` for full fidelity. |
+| Completely empty page | A referenced GLB is missing (expected — assets are excluded) and there is no error boundary. Restore assets per `ASSET_REVIEW.md`. |
 | `npm run verify` cannot find a browser | Set `CHROME_PATH` to a Chrome/Chromium binary. |
 | Build fails on `tsc -b` | A TypeScript error; fix types before building. |
 | Large bundle warnings | Known (Three.js/R3F vendor chunks); addressed in Phase 1/6, not Phase 0. |

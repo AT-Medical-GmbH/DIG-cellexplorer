@@ -150,10 +150,10 @@ npm run verify           # Playwright visual verification (needs a running dev
 ```
 
 > **Note on 3D assets:** the large GLB models and image assets are **not**
-> committed to this repository (licence review pending). The app runs with
-> procedural fallback geometry when models are absent. To exercise the
-> full-fidelity 3D views locally, restore the assets from upstream as described
-> in [`docs/ASSET_REVIEW.md`](docs/ASSET_REVIEW.md).
+> committed to this repository (licence review pending). **Without them the app
+> does not start usefully**: a missing GLB currently leaves an empty page (there
+> is no error boundary; verified). Restore the assets from upstream as described
+> in [`docs/ASSET_REVIEW.md`](docs/ASSET_REVIEW.md) before running the app.
 
 A verified, step-by-step guide (environment, structure, branching, commits, PRs)
 is in [`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md).
@@ -167,6 +167,7 @@ is in [`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md).
 | [`docs/ROADMAP.md`](docs/ROADMAP.md) | Phased plan (Phase 0 → Phase 6) |
 | [`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md) | Developer setup, workflow, conventions |
 | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Frontend/3D architecture, data model, integration points |
+| [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) | Staging deployment concept (sub-path, proxy, headers, blockers) |
 | [`docs/ASSET_REVIEW.md`](docs/ASSET_REVIEW.md) | Asset inventory, provenance, licence review (pending) |
 | [`docs/THIRD_PARTY_NOTICES.md`](docs/THIRD_PARTY_NOTICES.md) | Upstream origin + third-party components |
 | [`docs/MEDICAL_EDUCATION_SCOPE.md`](docs/MEDICAL_EDUCATION_SCOPE.md) | Educational-only scope and boundaries |
