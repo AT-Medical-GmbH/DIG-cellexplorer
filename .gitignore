@@ -1,0 +1,37 @@
+node_modules/
+dist/
+verification/
+docs/PRD.md
+
+.DS_Store
+*.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# -----------------------------------------------------------------------------
+# AT Medical / DIG-cellexplorer — heavy, unreviewed upstream binary assets
+# -----------------------------------------------------------------------------
+# The following large binary assets exist in the upstream project
+# (cclank/cell-architecture-studio) but are intentionally NOT committed to this
+# AT Medical repository during the Phase 0 initialization. Their licensing and
+# provenance have not yet been reviewed (see docs/ASSET_REVIEW.md), and two of
+# the GLB models are of unknown "user-provided" origin.
+#
+# To run the full-fidelity 3D prototype locally, restore them from upstream as
+# described in docs/ASSET_REVIEW.md ("Restoring assets for local testing").
+# Do NOT commit them here until the asset review in Phase 2 clears or replaces
+# them.
+# (directory contents ignored, but a tracked README placeholder is kept in each)
+public/models/*
+!public/models/README.md
+public/cell-renders/*
+!public/cell-renders/README.md
+public/cell-renders-transparent/*
+!public/cell-renders-transparent/README.md
+public/texture-references/*
+!public/texture-references/README.md
+docs/media/*
+!docs/media/README.md
