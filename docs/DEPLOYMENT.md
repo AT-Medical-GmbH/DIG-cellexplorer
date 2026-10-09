@@ -128,8 +128,12 @@ Consequences:
    not be accepted by default.
 
 **Done:** both are self-hosted (`useGLTF.setDecoderPath`, `<Environment files=…>`).
-Remaining CSP note: Three.js still needs `blob:` (decoded textures) and possibly
-`worker-src blob:`; verify against the final header set. Do **not** loosen the
+Verified 2026-10-09 with a Draco-compressed test model (`gltf-transform draco`,
+1.5 MB → 92 KB): the browser fetched `draco_wasm_wrapper.js` and
+`draco_decoder.wasm` from `/cellexplorer/draco/` and rendered the model without
+the fallback. The decoder runs in a Web Worker created from a `blob:` URL, so the
+final CSP for this route needs **`worker-src blob:`** (and `blob:` in `img-src`/
+`connect-src` for decoded textures); verify against the final header set. Do **not** loosen the
 shared `secureHeaders` for the whole site.
 Framing: `frame-ancestors 'self'` already allows embedding by same-origin pages.
 
