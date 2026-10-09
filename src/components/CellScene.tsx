@@ -1,7 +1,7 @@
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Center, ContactShadows, Environment, Float, Html, OrbitControls, RoundedBox, useGLTF, useProgress } from "@react-three/drei";
 import { ACESFilmicToneMapping } from "three";
-import { Suspense, useMemo, useRef } from "react";
+import { Component, Suspense, useMemo, useRef, type ReactNode } from "react";
 import {
   CatmullRomCurve3,
   Group,
@@ -104,6 +104,67 @@ type CommonModelProps = {
   crossSection: boolean;
 };
 
+
+// Self-hosted decoder and lighting (see public/draco and public/hdri): the app must
+// not fetch anything from third-party hosts at runtime (privacy, CSP).
+const ASSET_BASE = import.meta.env.BASE_URL;
+const STUDIO_HDRI = `${ASSET_BASE}hdri/studio_small_03_1k.hdr`;
+useGLTF.setDecoderPath(`${ASSET_BASE}draco/`);
+
+/**
+ * Catches a failed GLB load (missing file, network error, corrupt model) so it
+ * does not unmount the whole app. Resets whenever `resetKey` changes.
+ */
+class ModelErrorBoundary extends Component<
+  { resetKey: string; fallback: ReactNode; children: ReactNode },
+  { failed: boolean }
+> {
+  state = { failed: false };
+
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+
+  componentDidCatch(error: unknown) {
+    console.error("3D model failed to load, showing procedural fallback:", error);
+  }
+
+  componentDidUpdate(prev: { resetKey: string }) {
+    if (prev.resetKey !== this.props.resetKey && this.state.failed) {
+      this.setState({ failed: false });
+    }
+  }
+
+  render() {
+    return this.state.failed ? this.props.fallback : this.props.children;
+  }
+}
+
+function ProceduralCellModel({ cell, ...common }: CommonModelProps & { cell: CellItem }) {
+  return (
+    <>
+      {cell.modelKind === "plant" && <PlantModel {...common} />}
+      {cell.modelKind === "whiteBlood" && <WhiteBloodModel {...common} />}
+      {cell.modelKind === "neuron" && <NeuronModel {...common} />}
+      {cell.modelKind === "epithelial" && <EpithelialModel {...common} />}
+      {cell.modelKind === "bacteria" && <BacteriaModel {...common} />}
+      {cell.modelKind === "animal" && <AnimalModel {...common} />}
+      {cell.modelKind === "muscle" && <MuscleModel {...common} />}
+    </>
+  );
+}
+
+function ModelUnavailableNotice({ cell }: { cell: CellItem }) {
+  return (
+    <Html position={[0, -2.35, 0]} center className="model-loader model-loader-fallback">
+      <div>
+        <span>3D model unavailable</span>
+        <strong>{cell.name}</strong>
+        <small className="model-loader-source">Showing simplified procedural view</small>
+      </div>
+    </Html>
+  );
+}
 
 function AssetCellModel({
   cell,
@@ -920,17 +981,19 @@ function CellModel({
   return (
     <group ref={group} position={[0, 0, 0]}>
       {cell.modelAsset ? (
-        <AssetCellModel cell={cell} asset={cell.modelAsset} {...common} />
+        <ModelErrorBoundary
+          resetKey={cell.id}
+          fallback={
+            <>
+              <ProceduralCellModel cell={cell} {...common} />
+              <ModelUnavailableNotice cell={cell} />
+            </>
+          }
+        >
+          <AssetCellModel cell={cell} asset={cell.modelAsset} {...common} />
+        </ModelErrorBoundary>
       ) : (
-        <>
-          {cell.modelKind === "plant" && <PlantModel {...common} />}
-          {cell.modelKind === "whiteBlood" && <WhiteBloodModel {...common} />}
-          {cell.modelKind === "neuron" && <NeuronModel {...common} />}
-          {cell.modelKind === "epithelial" && <EpithelialModel {...common} />}
-          {cell.modelKind === "bacteria" && <BacteriaModel {...common} />}
-          {cell.modelKind === "animal" && <AnimalModel {...common} />}
-          {cell.modelKind === "muscle" && <MuscleModel {...common} />}
-        </>
+        <ProceduralCellModel cell={cell} {...common} />
       )}
     </group>
   );
@@ -995,7 +1058,7 @@ export function CellScene({
     >
       {!nativeMaterial && <color attach="background" args={["#fbf7ee"]} />}
       <Suspense fallback={null}>
-        <Environment preset="studio" background={false} environmentIntensity={nativeMaterial ? 0.75 : 0.5} />
+        <Environment files={STUDIO_HDRI} background={false} environmentIntensity={nativeMaterial ? 0.75 : 0.5} />
       </Suspense>
       <ambientLight intensity={nativeMaterial ? 0.65 : 0.85} />
       <hemisphereLight
