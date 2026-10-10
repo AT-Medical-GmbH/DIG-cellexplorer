@@ -2,6 +2,11 @@ import { Sparkles } from "lucide-react";
 import { cells } from "../data/cells";
 import { Modal } from "./Modal";
 
+/** Models with a verifiable public source — these need visible attribution. */
+const creditedModels = cells.filter(
+  (cell) => cell.modelAsset && cell.modelAsset.sourceUrl.startsWith("https://"),
+);
+
 export function AboutModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   return (
     <Modal open={open} onClose={onClose} label="About this app" panelClassName="about-modal">
@@ -30,7 +35,33 @@ export function AboutModal({ open, onClose }: { open: boolean; onClose: () => vo
             <a href="https://3d.nih.gov" target="_blank" rel="noopener noreferrer">
               NIH 3D Print Exchange
             </a>
-            . Licenses vary per entry — verify each model's terms before reuse.
+            . Licences differ per entry:
+            <ul className="about-credits">
+              {creditedModels.map((cell) => {
+                const asset = cell.modelAsset!;
+                return (
+                  <li key={cell.id}>
+                    <a href={asset.sourceUrl} target="_blank" rel="noopener noreferrer">
+                      {cell.name}
+                    </a>
+                    {asset.author ? ` by ${asset.author}` : ""}
+                    {asset.licence ? (
+                      <>
+                        {" — "}
+                        {asset.licenceUrl ? (
+                          <a href={asset.licenceUrl} target="_blank" rel="noopener noreferrer">
+                            {asset.licence}
+                          </a>
+                        ) : (
+                          asset.licence
+                        )}
+                      </>
+                    ) : null}
+                  </li>
+                );
+              })}
+            </ul>
+            Specimens without a listed model use procedural geometry.
           </dd>
         </div>
         <div>

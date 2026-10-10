@@ -35,3 +35,8 @@ public/texture-references/*
 !public/texture-references/README.md
 docs/media/*
 !docs/media/README.md
+# NIH 3D previews under CC BY-NC-SA 4.0 ("Animal Cell", "Neuron", destacados tv):
+# non-commercial licence, restored only by explicit decision via
+# `node scripts/prepare-assets.mjs --with-nc`. The CC0 preview stays tracked.
+public/nih-previews/animal-cell-nih.png
+public/nih-previews/neuron-nih.png

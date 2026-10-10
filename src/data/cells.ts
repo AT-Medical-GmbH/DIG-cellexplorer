@@ -31,6 +31,11 @@ export type CellModelAsset = {
   previewUrl: string;
   sourceLabel: string;
   sourceUrl: string;
+  /** Creator as named by the source entry (required for CC BY attribution). */
+  author?: string;
+  /** Licence as verified on the source entry page (see docs/ASSET_REVIEW.md). */
+  licence?: string;
+  licenceUrl?: string;
   scale: number;
   rotation?: [number, number, number];
   position?: [number, number, number];
@@ -265,8 +270,11 @@ export const cells: CellItem[] = [
     modelAsset: {
       url: assetUrl("models/neuron-nih.glb"),
       previewUrl: assetUrl("nih-previews/neuron-nih.png"),
-      sourceLabel: "NIH 3D Neuron",
-      sourceUrl: "https://3d.nih.gov/entries/3DPX-015796/2",
+      sourceLabel: "NIH 3D · Neuron (destacados tv, CC BY-NC-SA 4.0)",
+      sourceUrl: "https://3d.nih.gov/entries/3DPX-015796",
+      author: "destacados tv",
+      licence: "CC BY-NC-SA 4.0",
+      licenceUrl: "https://creativecommons.org/licenses/by-nc-sa/4.0/",
       scale: 3.15,
       rotation: [0.18, -0.24, -0.18],
       position: [0, 0.05, 0],
@@ -417,8 +425,11 @@ export const cells: CellItem[] = [
     modelAsset: {
       url: assetUrl("models/bacteria-wall-nih.glb"),
       previewUrl: assetUrl("nih-previews/bacteria-wall-nih.png"),
-      sourceLabel: "NIH 3D Gram Positive Cell Wall",
-      sourceUrl: "https://3d.nih.gov/entries/3DPX-010752/2",
+      sourceLabel: "NIH 3D · Gram Positive Bacterial Cell Wall Model (Model3D, CC0 1.0)",
+      sourceUrl: "https://3d.nih.gov/entries/3DPX-010752",
+      author: "Model3D",
+      licence: "CC0 1.0 (Public Domain)",
+      licenceUrl: "https://creativecommons.org/publicdomain/zero/1.0/",
       scale: 0.00185,
       rotation: [0.08, -0.44, -0.08],
       position: [0, -0.1, 0],
@@ -498,8 +509,11 @@ export const cells: CellItem[] = [
     modelAsset: {
       url: assetUrl("models/animal-cell-nih.glb"),
       previewUrl: assetUrl("nih-previews/animal-cell-nih.png"),
-      sourceLabel: "NIH 3D Animal Cell",
-      sourceUrl: "https://3d.nih.gov/entries/3DPX-015797/2",
+      sourceLabel: "NIH 3D · Animal Cell (destacados tv, CC BY-NC-SA 4.0)",
+      sourceUrl: "https://3d.nih.gov/entries/3DPX-015797",
+      author: "destacados tv",
+      licence: "CC BY-NC-SA 4.0",
+      licenceUrl: "https://creativecommons.org/licenses/by-nc-sa/4.0/",
       scale: 0.044,
       rotation: [0.24, -0.08, 0.03],
       position: [0, -0.03, 0],

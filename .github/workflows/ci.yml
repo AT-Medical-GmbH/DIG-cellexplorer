@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    name: Build, test and asset guard
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Type-check and build (root)
+        run: npm run build
+
+      - name: Build for the website sub-path
+        run: VITE_BASE_PATH=/cellexplorer/ npm run build
+
+      - name: Unit tests and preflight checks
+        run: npm test
+
+      - name: Guard — no unreviewed asset may be tracked
+        run: |
+          set -euo pipefail
+          tracked="$(git ls-files \
+            'public/models/*' 'public/cell-renders/*' 'public/cell-renders-transparent/*' \
+            'public/texture-references/*' 'docs/media/*' \
+            'public/nih-previews/animal-cell-nih.png' 'public/nih-previews/neuron-nih.png' \
+            | grep -v '/README\.md$' || true)"
+          if [ -n "$tracked" ]; then
+            echo "::error title=Unreviewed asset tracked::The following files must not be committed (see docs/ASSET_REVIEW.md):"
+            echo "$tracked"
+            exit 1
+          fi
+          echo "OK: no unreviewed asset is tracked."
+
+      - name: Guard — upstream licence and attribution present
+        run: |
+          set -euo pipefail
+          grep -q "Copyright (c) 2026 cclank" LICENSE
+          grep -q "cclank/cell-architecture-studio" docs/THIRD_PARTY_NOTICES.md
+          echo "OK: MIT licence and upstream attribution present."

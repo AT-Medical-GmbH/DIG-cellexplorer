@@ -1,169 +1,135 @@
-# Deployment Concept — Login-gated, served by WordPress
+# Deployment — login-gated delivery via the AT Medical website
 
-**Status: prepared, nothing deployed.** The app is delivered under
-`/cellexplorer/` by the AT Medical WordPress site (`ATMED-wordpress`), **only to
-logged-in users**, and embedded in the site layout under *Akademie → Cell Explorer*.
-The implementation lives in `ATMED-wordpress` (`docs/cell-explorer.md`); this
-document keeps the app-side requirements. It does **not** authorise a release: the
-asset review in [`ASSET_REVIEW.md`](ASSET_REVIEW.md) must be completed first.
+**Status (2026-10-10): app side prepared; tier-A browser check and dependency audit fix still open.**
+The app is served under `/cellexplorer/` by the AT Medical WordPress site
+(`ATMED-wordpress`), **only to logged-in users**, embedded in the site layout
+under *Akademie → Cell Explorer*. The site-side implementation and the operator
+runbook live in `ATMED-wordpress/docs/cell-explorer.md`; this document keeps the
+**app-side** requirements and the build procedure.
 
-> **Superseded:** the earlier Traefik-router sketch (§3) is no longer the plan.
-> A proxy rule or a page-level check alone would leave the files reachable by URL;
-> WordPress now checks the session for every file. §3 is kept for reference only.
-
-Decisions taken for this concept:
+This document does **not** authorise a public or commercial release. It describes
+a non-commercial, access-restricted deployment whose asset content is governed by
+[`ASSET_REVIEW.md`](ASSET_REVIEW.md) ("Production asset set").
 
 | Topic | Decision |
 | --- | --- |
-| Audience | Logged-in website users only, **not indexed** |
-| Placement | Sub-path `/cellexplorer/`, embedded as an iframe on *Akademie → Cell Explorer* |
-| Execution | AT Medical team deploys; code for the site side is in `ATMED-wordpress` |
-| Assets | Logged-in is **not** the same as reviewed: if registration is open, anyone can become a user. Gate on the asset review or restrict by role |
+| Audience | Logged-in website users only; `noindex`; no public URL |
+| Placement | Sub-path `/cellexplorer/`, iframe on *Akademie → Cell Explorer* |
+| Access check | WordPress session, **per file** (page-only or proxy-only checks would leave files reachable by URL) |
+| Execution | Build on a build machine, install on the host (`ATMED-core`); never build on the production container |
+| Assets | Tier A (CC0) always; tier B (CC BY-NC-SA 4.0) only after the recorded decision; tier C never |
 
 ---
 
-## 1. Build for a sub-path
-
-The app is a static single-page build. A sub-path deployment needs the base path
-set **at build time**:
+## 1. Build
 
 ```bash
-VITE_BASE_PATH=/cellexplorer/ npm run build   # output: dist/
+git clone https://github.com/AT-Medical-GmbH/DIG-cellexplorer.git && cd DIG-cellexplorer
+git checkout <release commit>            # the merged main commit, recorded in the deploy log
+npm ci                                   # Node ≥ 20.19 (verified 22.x), npm ≥ 10
+
+# 1) restore the licence-cleared assets (git-ignored)
+node scripts/prepare-assets.mjs --cc0-only        # or --with-nc after the tier-B decision
+
+# 2) build for the sub-path
+VITE_BASE_PATH=/cellexplorer/ npm run build       # output: dist/
 ```
 
-- `VITE_BASE_PATH` defaults to `/`, so local development and root deployments are
-  unchanged. It must start **and end** with `/`.
-- Asset URLs in `src/data/cells.ts` are resolved through `import.meta.env.BASE_URL`,
-  so models and images resolve to `/cellexplorer/models/…` etc.
-- `vite preview` must be started with the same variable to serve the sub-path:
-  `VITE_BASE_PATH=/cellexplorer/ npm run preview`.
+- `VITE_BASE_PATH` is read at build time, defaults to `/`, and must start **and
+  end** with `/`. All asset URLs (`src/data/cells.ts`, Draco decoder, HDRI) go
+  through `import.meta.env.BASE_URL`, so they resolve to `/cellexplorer/…`.
+- `dist/` is self-contained: `index.html`, hashed `assets/*.js|css`, `draco/`,
+  `hdri/`, `favicon.svg`, `nih-previews/`, and `models/` with whatever
+  `prepare-assets.mjs` restored. Size without models ≈ 4.2 MB (≈ 2.3 MB
+  JS/CSS before gzip, 1.6 MB HDRI, 0.75 MB Draco).
+- Local check of the exact artefact: `VITE_BASE_PATH=/cellexplorer/ npm run preview`
+  and open `http://127.0.0.1:4173/cellexplorer/`.
 
-Verified (Phase 1 prep): the build emits `/cellexplorer/assets/…` and
-`/cellexplorer/favicon.svg`, and a browser request for a model goes to
-`/cellexplorer/models/<file>.glb`.
+### Why not build on the server
 
-## 2. What must be served
+The production WordPress container has no Node toolchain, and the staging-first
+principle keeps toolchains off production hosts. Build elsewhere, copy `dist/`.
 
-`dist/` contains only the app (≈1.8 MB JS/CSS before gzip). The 3D assets are
-**not** part of the build output unless they exist in `public/` at build time:
+## 2. Install (summary; the authoritative steps are in `ATMED-wordpress/docs/cell-explorer.md`)
 
-| Content | Source | Note |
-| --- | --- | --- |
-| App bundle | `dist/` | built as above |
-| GLB models, renders | `public/models`, `public/cell-renders-transparent` | restored locally from upstream (see `ASSET_REVIEW.md`); **not in git** |
-
-For staging, restore the assets into `public/` **before** `npm run build`, or copy
-them next to `dist/`. Do not commit them.
-
-> ✅ **Missing GLB no longer breaks the page.** An error boundary around the model
-> loader now falls back to the procedural geometry of that specimen and shows a
-> "3D model unavailable" notice (verified in a browser). Deploying the complete
-> asset set is still required for the intended fidelity.
-
-## 3. Reverse proxy (Traefik) — sketch (superseded, reference only)
-
-`ATMED-traefik` already provides `secureHeaders` and `authentik-forwardauth`
-middlewares. A sub-path router must out-rank the WordPress router that owns the
-host. Illustrative only — adapt names, hosts, entrypoints and the upstream
-service to the real stack; do not copy blindly:
-
-```yaml
-http:
-  routers:
-    cellexplorer-staging:
-      rule: "Host(`www.example.com`) && PathPrefix(`/cellexplorer`)"
-      priority: 100                  # higher than the WordPress catch-all
-      service: cellexplorer-svc      # e.g. a small static server (nginx) serving dist/
-      entryPoints: [websecure]
-      middlewares:
-        - authentik-forwardauth      # or a basicAuth middleware — access restriction
-        - cellexplorer-noindex
-        - cellexplorer-headers       # see §4; NOT the unmodified secureHeaders
-      tls:
-        certResolver: letsencrypt
-  middlewares:
-    cellexplorer-noindex:
-      headers:
-        customResponseHeaders:
-          X-Robots-Tag: "noindex, nofollow, noarchive"
+```bash
+rsync -a --delete dist/ ATMED-core:/srv/atmed/stacks/wordpress/wordpress/wp-content/atmed-private/cellexplorer/
 ```
 
-- **No `stripPrefix` is needed** — the app is built *with* the base path.
-- The static server must serve `index.html` for `/cellexplorer/` and **serve
-  `.glb` as `model/gltf-binary`**. There is no client-side router, so no
-  history-API fallback is required.
-- Access restriction: now done in WordPress (`is_user_logged_in()` per file). The
-  app itself has no authentication and must not get any (out of scope).
-- **Framing:** the site's Traefik label `frameDeny=true` sends
-  `X-Frame-Options: DENY` and blocks the iframe, even same-origin. It must become
-  `SAMEORIGIN` (documented in `ATMED-wordpress/docs/cell-explorer.md`).
-- Large files: the two biggest GLBs are ≈59 MB and ≈56 MB. Enable compression for
-  JS/CSS only (GLB/PNG are already compact or incompressible), set long
-  `Cache-Control` for hashed `/assets/*`, and check proxy body/timeouts.
+The MU-plugin `atmed-cellexplorer.php` serves this directory at `/cellexplorer/`
+for logged-in users, writes the directory's `.htaccess` deny rule if it is
+missing, and shows the navigation entry as soon as `index.html` exists.
 
-## 4. Security headers and third-party requests (resolved)
+## 3. Runtime requirements and headers
 
-**Resolved on this branch:** the Draco decoder (`public/draco/`, Apache-2.0) and
-the studio HDRI (`public/hdri/`, CC0 from Poly Haven) are now shipped with the
-app and loaded from the same origin. A browser smoke test on the sub-path build
-contacts no third-party host. The analysis below is kept for the record.
+**No third-party request at runtime.** Draco decoder (`public/draco/`) and the
+studio HDRI (`public/hdri/`) are self-hosted; a browser smoke test of the
+sub-path build contacts no external host (verified 2026-10-09 with the full-asset build).
 
-Originally the app **fetched resources from third parties at runtime** (found by
-inspecting the production bundle):
+**Content Security Policy.** The site currently sets no CSP (Traefik
+`secure-headers` middleware sets `X-Frame-Options`, nosniff, referrer policy and
+HSTS only). If a CSP is introduced for the site or this route, the app needs:
 
-| Request | Host | Triggered by |
+| Directive | Value | Why |
 | --- | --- | --- |
-| Draco decoder (`…/draco/versioned/decoders/1.5.5/`) | `www.gstatic.com` (Google) | `useGLTF(url, true, true)` in `CellScene.tsx` |
-| Studio HDRI (`…/drei-assets/…/hdri/`) | `raw.githack.com` | `<Environment preset="studio">` in `CellScene.tsx` |
+| `script-src` | `'self'` | hashed module bundles, no inline scripts |
+| `worker-src` | `'self' blob:` | the Draco decoder runs in a Web Worker created from a `blob:` URL (verified) |
+| `img-src` | `'self' blob: data:` | decoded GLB textures |
+| `connect-src` | `'self'` | model/HDRI fetches |
+| `frame-ancestors` | `'self'` | iframe on the same origin (the MU-plugin already sends this) |
 
-Consequences:
+**Framing.** `X-Frame-Options` must be `SAMEORIGIN` (the compose label was
+`frameDeny=true`); the companion change is in `ATMED-wordpress`.
 
-1. **CSP conflict.** The shared `secureHeaders` middleware sets
-   `connect-src 'self'` and `default-src 'self'`. These requests would be
-   blocked (not yet tested in a browser against that CSP). Three.js/R3F also
-   typically needs `blob:` for decoded GLB textures and may need `worker-src
-   blob:` for decoders — verify empirically.
-2. **Privacy (DSGVO).** Even if allowed, every visitor's IP address would be sent
-   to Google and a third-party CDN. For a medical-education product this should
-   not be accepted by default.
+**Caching.** Responses are `Cache-Control: private` (`immutable` for hashed
+`assets/`), `Vary: Cookie`, `X-Robots-Tag: noindex`. Cloudflare and other shared
+caches must never store them; Cloudflare honours `private` with default settings
+— verify after enabling any "cache everything" rule.
 
-**Done:** both are self-hosted (`useGLTF.setDecoderPath`, `<Environment files=…>`).
-Verified 2026-10-09 with a Draco-compressed test model (`gltf-transform draco`,
-1.5 MB → 92 KB): the browser fetched `draco_wasm_wrapper.js` and
-`draco_decoder.wasm` from `/cellexplorer/draco/` and rendered the model without
-the fallback. The decoder runs in a Web Worker created from a `blob:` URL, so the
-final CSP for this route needs **`worker-src blob:`** (and `blob:` in `img-src`/
-`connect-src` for decoded textures); verify against the final header set. Do **not** loosen the
-shared `secureHeaders` for the whole site.
-Framing: `frame-ancestors 'self'` already allows embedding by same-origin pages.
+## 4. Behaviour without the full asset set
 
-## 5. Embedding on the website
+A missing GLB does **not** break the page: `ModelErrorBoundary` falls back to the
+specimen's procedural geometry plus a notice. Missing reference images degrade
+to placeholders (sidebar thumbnails, flashcards) or empty thumbnails (quiz review).
+Designed behaviour; a browser check of a tier-A-only build is still open (see §8 and `ASSET_REVIEW.md`).
 
-Because the app lives on the same origin under a sub-path, the website can link to
-it or embed it with `<iframe src="/cellexplorer/">`. Notes:
+## 5. Browser storage and privacy
 
-- Give the iframe a sensible height and `allow="fullscreen"`; WebGL works inside
-  same-origin iframes.
-- State is stored in the browser's `localStorage` under the site origin
-  (progress, favourites, notebooks). It is shared with other apps on the same
-  origin — check `src/lib/storageKeys.ts` for key collisions and consider the
-  privacy statement.
+The app keeps progress, favourites, notes and quiz history in `localStorage`
+under the site origin, all keys prefixed `cas-` (see `src/lib/storageKeys.ts`).
+No cookies, no network persistence, no analytics, no tracking. The website's
+privacy statement should mention this local storage for the Cell Explorer; the
+user can clear it via the app's "Reset all data" action.
 
-## 6. Pre-conditions before any non-staging use
+## 6. Pre-conditions before the go-live (login-gated, non-commercial)
 
-- [ ] Asset review complete and signed off (`ASSET_REVIEW.md`); unknown-origin GLBs
-      replaced.
-- [x] Draco decoder and HDRI self-hosted; no third-party runtime requests.
-- [x] Error boundary / graceful fallback for failed model loads.
-- [ ] CSP validated in a real browser against the final header set.
-- [ ] Medical-didactic content review (`MEDICAL_EDUCATION_SCOPE.md`).
-- [ ] Privacy statement covers `localStorage` use; DSGVO review.
-- [ ] Dependency advisories triaged (`npm audit`).
-- [ ] Performance baseline (first 3D frame, 120 MB model download).
-- [ ] Staging access restriction and `noindex` removed only by explicit decision.
+- [x] Draco decoder and HDRI self-hosted; no third-party runtime requests
+- [x] Error boundary / graceful fallback for failed model loads and images
+- [x] Sub-path build verified in a browser; CSP needs documented (§3)
+- [x] NIH asset licences verified; attribution implemented; restore script with checksums
+- [x] CI: build (root + sub-path), tests, tracked-asset guard, licence guard
+- [ ] Dependency advisories: `npm audit` reports 12 (2 low, 4 moderate, 6 high; mostly transitive); `npm audit fix` not yet run
+- [ ] Tier-B decision recorded in `ASSET_REVIEW.md` (default: tier A only)
+- [ ] Both pull requests merged (`DIG-cellexplorer#2`, `ATMED-wordpress#115`)
+- [ ] Privacy statement mentions the app's `localStorage` use
+- [ ] Operator checklist in `ATMED-wordpress/docs/cell-explorer.md` completed
+
+Out of scope for this deployment and tracked as issues: medical-didactic content
+review (#5), accessibility and performance baseline (#9), branding (#10), AI
+tutor (#7), Moodle (#8).
 
 ## 7. Rollback
 
-Static build: keep the previous `dist/` directory and switch the served folder (or
-revert the router rule). No data migration, no backend, nothing to roll back
-beyond files and the proxy rule.
+Static build: delete or rename the installed directory
+(`wp-content/atmed-private/cellexplorer/`) — the route answers 404 and the
+navigation entry disappears at once — or reinstall the previous `dist/`. No
+database change, no backend, nothing else to roll back.
+
+## 8. Verification log
+
+| Date | What | Result |
+| --- | --- | --- |
+| 2026-10-09 | Sub-path build emits `/cellexplorer/assets/…`; model request goes to `/cellexplorer/models/…` | OK |
+| 2026-10-09 | Headless Chromium on `vite preview`: HDRI + NIH model load same-origin; no third-party host | OK |
+| 2026-10-09 | Draco-compressed test model: decoder fetched from `/cellexplorer/draco/`, worker from `blob:` | OK |
+| 2026-10-10 | Tier-A-only build in a browser (procedural fallbacks, image placeholders, console) | **open — not yet run** |

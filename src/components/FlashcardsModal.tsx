@@ -17,6 +17,23 @@ const CATEGORY_FILTERS: ("All" | CellCategory)[] = [
   ),
 ];
 
+/**
+ * Flashcard picture with a graceful fallback: the reference renders are not part
+ * of every deployment (licence review), so a missing file must not show a broken
+ * image. Keyed by card in the parent so the state resets per card.
+ */
+function FlashcardImage({ src }: { src: string }) {
+  const [broken, setBroken] = useState(false);
+  if (broken) {
+    return (
+      <span className="flashcard-img-missing" aria-hidden="true">
+        Reference image not available
+      </span>
+    );
+  }
+  return <img src={src} alt="" aria-hidden="true" onError={() => setBroken(true)} />;
+}
+
 function shuffle<T>(arr: T[]): T[] {
   const copy = [...arr];
   for (let i = copy.length - 1; i > 0; i -= 1) {
@@ -100,7 +117,7 @@ export function FlashcardsModal({
           >
             <span className="flashcard-inner">
               <span className="flashcard-face flashcard-front">
-                <img src={card.renderImage!.url} alt="" aria-hidden="true" />
+                <FlashcardImage key={card.id} src={card.renderImage!.url} />
                 <span className="flashcard-hint">
                   <RotateCw size={14} /> What specimen is this?
                 </span>

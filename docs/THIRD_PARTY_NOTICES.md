@@ -76,28 +76,41 @@ not a substitute for a generated SBOM — see the open task below.
 
 ---
 
-## 3. Asset provenance (NOT cleared)
+## 3. Asset provenance
 
-The upstream project ships substantial binary media assets. **Their licensing
-has not been verified**, and some have unknown origin. They are therefore
-**not committed** to this AT Medical repository during Phase 0, and none of them
-may be published or used commercially until reviewed.
+The upstream project ships substantial binary media assets. They are **not
+committed** to this repository; licence-cleared files are restored for a build by
+`scripts/prepare-assets.mjs` (pinned commit, SHA-256-verified). Full inventory
+and the production asset tiers: [`ASSET_REVIEW.md`](ASSET_REVIEW.md).
 
-High-level provenance (full inventory in [`ASSET_REVIEW.md`](ASSET_REVIEW.md)):
+### 3D models from the NIH 3D Print Exchange (verified 2026-10-09)
+
+| Model (file) | NIH 3D entry | Author | Licence | Attribution shown |
+| --- | --- | --- | --- | --- |
+| Gram Positive Bacterial Cell Wall Model (`bacteria-wall-nih.glb`, preview PNG) | https://3d.nih.gov/entries/3DPX-010752 | Model3D | **CC0 1.0** (Public Domain) | yes (voluntary) |
+| Animal Cell (`animal-cell-nih.glb`, preview PNG) | https://3d.nih.gov/entries/3DPX-015797 | destacados tv | **CC BY-NC-SA 4.0** | yes — required |
+| Neuron (`neuron-nih.glb`, preview PNG) | https://3d.nih.gov/entries/3DPX-015796 | destacados tv | **CC BY-NC-SA 4.0** | yes — required |
+
+Attribution is rendered in the app (loading notice label and the *About* dialog,
+driven by `author` / `licence` / `licenceUrl` in `src/data/cells.ts`) and
+recorded here. The CC BY-NC-SA models may only be included in **non-commercial**
+deployments and only after the decision recorded in `ASSET_REVIEW.md`
+("Production asset set", tier B). Licence texts:
+https://creativecommons.org/publicdomain/zero/1.0/ ·
+https://creativecommons.org/licenses/by-nc-sa/4.0/
+
+### Not cleared — never shipped
 
 | Asset group | Upstream origin | Concern |
 | --- | --- | --- |
 | `public/models/plant-cell-first001.glb` | "user-provided" (`/Users/lank/Downloads/first001.glb`) | **Unknown provenance / licence** |
 | `public/models/white-blood-cell-user.glb` | "user-provided" (`/Users/lank/Downloads/second.glb`) | **Unknown provenance / licence** |
-| `public/models/*-nih.glb` + `public/nih-previews/*` | NIH 3D (3d.nih.gov entries 3DPX-015797, 3DPX-015796, 3DPX-010752) | Per-entry licence/attribution must be verified |
 | `public/cell-renders/`, `public/cell-renders-transparent/` | Generated reference/thumbnail images | Generated-image IP/usage terms unverified |
 | `public/texture-references/gpt-image-2-…/` | AI-generated (GPT image model) teaching images | Generated-image IP/usage terms unverified |
 | `docs/media/*` | Demo GIF/MP4 of the upstream app | Shows upstream UI/branding; re-create for AT Medical |
 
-> The small NIH **preview PNGs** (`public/nih-previews/`) and the `favicon.svg`
-> are retained in the repository for continuity, but they too remain subject to
-> the asset review (their licence status is confirmed in
-> [`ASSET_REVIEW.md`](ASSET_REVIEW.md)).
+> `favicon.svg` ships with the upstream code under MIT and will be replaced by
+> AT Medical branding in a later phase.
 
 ---
 
@@ -119,4 +132,7 @@ commercial use is permitted.
 
 **No public release, external distribution, or commercial use of this project
 may occur until the asset review in [`ASSET_REVIEW.md`](ASSET_REVIEW.md) is
-completed and signed off.** This notice must be kept in sync with that review.
+completed and signed off.** The login-gated, non-commercial website deployment
+described in [`DEPLOYMENT.md`](DEPLOYMENT.md) may ship tier-A assets (CC0) at
+any time and tier-B assets (CC BY-NC-SA 4.0) only after the recorded decision.
+This notice must be kept in sync with that review.
