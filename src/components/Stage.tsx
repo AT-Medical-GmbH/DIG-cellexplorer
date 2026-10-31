@@ -94,6 +94,23 @@ export function Stage({
           />
         </div>
 
+        {cell.modelAsset?.author && cell.modelAsset.licence && cell.modelAsset.sourceUrl.startsWith("https://") && (
+          <p className="model-credit">
+            3D-Modell:{" "}
+            <a href={cell.modelAsset.sourceUrl} target="_blank" rel="noopener noreferrer">
+              {cell.name}
+            </a>{" "}
+            von {cell.modelAsset.author} (NIH 3D) —{" "}
+            {cell.modelAsset.licenceUrl ? (
+              <a href={cell.modelAsset.licenceUrl} target="_blank" rel="noopener noreferrer">
+                {cell.modelAsset.licence}
+              </a>
+            ) : (
+              cell.modelAsset.licence
+            )}
+          </p>
+        )}
+
         <div className="stage-toolbar">
           <button
             type="button"
