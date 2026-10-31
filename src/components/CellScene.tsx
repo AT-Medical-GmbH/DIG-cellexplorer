@@ -158,9 +158,9 @@ function ModelUnavailableNotice({ cell }: { cell: CellItem }) {
   return (
     <Html position={[0, -2.35, 0]} center className="model-loader model-loader-fallback">
       <div>
-        <span>3D model unavailable</span>
+        <span>3D-Modell nicht verfügbar</span>
         <strong>{cell.name}</strong>
-        <small className="model-loader-source">Showing simplified procedural view</small>
+        <small className="model-loader-source">Vereinfachte Ansicht wird angezeigt</small>
       </div>
     </Html>
   );
@@ -1010,7 +1010,7 @@ function ModelLoadingOverlay({ cell }: { cell: CellItem }) {
     <Html center className="model-loader">
       <div>
         <span className="model-loader-spinner" aria-hidden="true" />
-        <span>Loading 3D specimen</span>
+        <span>3D-Präparat wird geladen</span>
         <strong>{cell.name}</strong>
         {sourceLabel && <small className="model-loader-source">{sourceLabel}</small>}
         <i>

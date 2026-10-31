@@ -56,8 +56,8 @@ export function SpecimenGridModal({
                 type="search"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search…"
-                aria-label="Search specimens"
+                placeholder="Suchen …"
+                aria-label="Präparate suchen"
                 autoFocus
               />
             </label>
@@ -65,7 +65,7 @@ export function SpecimenGridModal({
         </div>
 
         <div className="browser-body">
-          {totalShown === 0 && <p className="browser-empty">No specimens to show.</p>}
+          {totalShown === 0 && <p className="browser-empty">Keine Präparate vorhanden.</p>}
           {filtered.map((section) => {
             if (section.items.length === 0) {
               return section.emptyHint ? (

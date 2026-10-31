@@ -49,7 +49,7 @@ export function SpecimenStrip({
       <div className="specimen-strip-header">
         <span className="specimen-strip-title">
           <Leaf size={18} />
-          Specimens
+          Präparate
         </span>
         <button
           type="button"
@@ -57,12 +57,12 @@ export function SpecimenStrip({
           onClick={() => {
             const next = !favoritesOnly;
             setFavoritesOnly(next);
-            onToast(next ? "Showing favorites only." : "Showing all specimens.");
+            onToast(next ? "Nur Favoriten werden angezeigt." : "Alle Präparate werden angezeigt.");
           }}
           aria-pressed={favoritesOnly}
         >
           <Star size={15} fill={favoritesOnly ? "currentColor" : "none"} />
-          <span>{favoritesOnly ? "Favorites" : "All"}</span>
+          <span>{favoritesOnly ? "Favoriten" : "Alle"}</span>
         </button>
         <button
           type="button"
@@ -71,19 +71,19 @@ export function SpecimenStrip({
             const pool = cells.filter((c) => c.id !== selectedCell.id);
             const pick = pool[Math.floor(Math.random() * pool.length)];
             onSelectCell(pick.id);
-            onToast(`Surprise — ${pick.name}!`);
+            onToast(`Überraschung – ${pick.name}!`);
           }}
         >
           <Shuffle size={15} />
-          <span>Surprise</span>
+          <span>Überraschung</span>
         </button>
         <label className="specimen-strip-search">
           <input
             type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search specimens…"
-            aria-label="Search specimens"
+            placeholder="Präparate suchen …"
+            aria-label="Präparate suchen"
           />
         </label>
       </div>
@@ -91,8 +91,8 @@ export function SpecimenStrip({
         {grouped.length === 0 && (
           <p className="specimen-strip-empty">
             {favoritesOnly && !query.trim()
-              ? "No favorites yet — tap the star on a tile."
-              : `No specimens match “${query}”.`}
+              ? "Noch keine Favoriten – tippen Sie bei einem Präparat auf den Stern."
+              : `Keine Präparate zu „${query}“ gefunden.`}
           </p>
         )}
         {grouped.map(({ category, items }) => (
@@ -111,10 +111,10 @@ export function SpecimenStrip({
                     className={`specimen-tile ${selected ? "is-active" : ""}`}
                     onClick={() => {
                       if (selected) {
-                        onToast(`${cell.name} is already on stage.`);
+                        onToast(`${cell.name} ist bereits ausgewählt.`);
                       } else {
                         onSelectCell(cell.id);
-                        onToast(`Loaded ${cell.name} on stage.`);
+                        onToast(`${cell.name} geladen.`);
                       }
                     }}
                     title={cell.name}
@@ -129,13 +129,13 @@ export function SpecimenStrip({
                         onToggleFavorite(cell.id);
                         onToast(
                           wasOn
-                            ? `Removed ${cell.name} from favorites.`
-                            : `Added ${cell.name} to favorites.`,
+                            ? `${cell.name} aus den Favoriten entfernt.`
+                            : `${cell.name} zu den Favoriten hinzugefügt.`,
                         );
                       }}
                       role="button"
                       tabIndex={0}
-                      aria-label={`Favorite ${cell.name}`}
+                      aria-label={`${cell.name} als Favorit`}
                     >
                       <Star size={12} fill="currentColor" />
                     </span>

@@ -18,13 +18,13 @@ export function Sidebar({ selectedCell, activeOrganelle, onSelectOrganelle, onTo
         <div className="panel-heading">
           <span>
             <Sparkles size={16} />
-            Organelles
+            Organellen
           </span>
           <button
             type="button"
             className="panel-heading-chev"
-            onClick={() => onToast(`${selectedCell.organelles.length} organelles available.`)}
-            aria-label="Organelles info"
+            onClick={() => onToast(`${selectedCell.organelles.length} Organellen verfügbar.`)}
+            aria-label="Hinweis zu Organellen"
           >
             <ChevronDown size={18} />
           </button>
@@ -38,10 +38,10 @@ export function Sidebar({ selectedCell, activeOrganelle, onSelectOrganelle, onTo
               key={organelle.id}
               onClick={() => {
                 if (activeOrganelle === organelle.id) {
-                  onToast(`${organelle.name} is already in focus.`);
+                  onToast(`${organelle.name} ist bereits im Fokus.`);
                 } else {
                   onSelectOrganelle(organelle.id);
-                  onToast(`Focused on ${organelle.name}.`);
+                  onToast(`Fokus auf ${organelle.name}.`);
                 }
               }}
             >

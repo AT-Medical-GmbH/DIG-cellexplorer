@@ -40,14 +40,14 @@ function achievement(
 }
 
 export const ACHIEVEMENTS: Achievement[] = [
-  achievement("first-contact", "First Contact", "View your first specimen", "Microscope", (s) => s.viewed, 1),
-  achievement("explorer", "Explorer", "Explore 3 specimens", "Compass", (s) => s.viewed, 3),
-  achievement("curator", "Curator", "Explore all 7 specimens", "Library", (s) => s.viewed, 7),
-  achievement("collector", "Collector", "Favorite 3 specimens", "Star", (s) => s.favorites, 3),
-  achievement("first-quiz", "Quizzer", "Finish a quiz", "Gamepad2", (s) => s.quizzes, 1),
-  achievement("sharp", "Sharpshooter", "Reach a 5 answer streak", "Zap", (s) => s.bestStreak, 5),
-  achievement("flawless", "Flawless", "Score a perfect quiz", "Trophy", (s) => s.perfect, 1),
-  achievement("scholar", "Scholar", "Reach level 5", "GraduationCap", (s) => s.level, 5),
+  achievement("first-contact", "Erster Kontakt", "Das erste Präparat ansehen", "Microscope", (s) => s.viewed, 1),
+  achievement("explorer", "Forschergeist", "3 Präparate erkunden", "Compass", (s) => s.viewed, 3),
+  achievement("curator", "Vollständige Sammlung", "Alle 7 Präparate erkunden", "Library", (s) => s.viewed, 7),
+  achievement("collector", "Favoritensammlung", "3 Präparate als Favorit markieren", "Star", (s) => s.favorites, 3),
+  achievement("first-quiz", "Quizstart", "Ein Quiz beenden", "Gamepad2", (s) => s.quizzes, 1),
+  achievement("sharp", "Treffsicher", "5 richtige Antworten in Folge", "Zap", (s) => s.bestStreak, 5),
+  achievement("flawless", "Fehlerfrei", "Ein Quiz ohne Fehler abschließen", "Trophy", (s) => s.perfect, 1),
+  achievement("scholar", "Fachwissen", "Stufe 5 erreichen", "GraduationCap", (s) => s.level, 5),
 ];
 
 // Stats including derived level, for progress display in the achievements panel.

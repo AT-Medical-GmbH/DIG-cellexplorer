@@ -51,6 +51,8 @@ export type CellRenderImage = {
 export type CellItem = {
   id: string;
   name: string;
+  /** Alternative names accepted in the quiz "type it" mode. */
+  aliases?: string[];
   type: string;
   accent: string;
   accentSoft: string;
@@ -77,8 +79,9 @@ export type CellItem = {
 export const cells: CellItem[] = [
   {
     id: "plant",
-    name: "Plant Cell",
-    type: "Eukaryotic Cell",
+    name: "Pflanzenzelle",
+    aliases: ["Pflanzliche Zelle"],
+    type: "Eukaryotische Zelle",
     accent: "#4f8a3f",
     accentSoft: "#e5f1d8",
     color: "#81b64b",
@@ -86,7 +89,7 @@ export const cells: CellItem[] = [
     defaultOrganelle: "nucleus",
     comparison: "animal",
     clinicalContext:
-      "A useful non-human baseline for teaching why cell walls and chloroplasts are absent from patient tissue samples.",
+      "Eine nützliche nicht-menschliche Vergleichsbasis, um zu zeigen, warum Zellwände und Chloroplasten in menschlichen Gewebeproben fehlen.",
     renderImage: {
       url: assetUrl("cell-renders-transparent/plant.png"),
       aspect: "square",
@@ -102,78 +105,79 @@ export const cells: CellItem[] = [
       materialMode: "native",
     },
     occurrence: {
-      title: "Leaves, stems, roots",
-      body: "Plant cells form tissues that store energy, move water, and turn sunlight into sugars.",
+      title: "Blätter, Stängel, Wurzeln",
+      body: "Pflanzenzellen bilden Gewebe, die Energie speichern, Wasser transportieren und Sonnenlicht in Zucker umwandeln.",
       motif: "leaf",
     },
     microscope: [
-      { label: "Light Microscope", tone: "#b9d48a", pattern: "plant-light" },
-      { label: "Stained Selection", tone: "#cf8cc2", pattern: "plant-stain" },
-      { label: "Electron Microscope", tone: "#9a9a8e", pattern: "electron" },
+      { label: "Lichtmikroskop", tone: "#b9d48a", pattern: "plant-light" },
+      { label: "Gefärbtes Präparat", tone: "#cf8cc2", pattern: "plant-stain" },
+      { label: "Elektronenmikroskop", tone: "#9a9a8e", pattern: "electron" },
     ],
     organelles: [
       {
         id: "nucleus",
-        name: "Nucleus",
-        subtitle: "The control center",
+        name: "Zellkern",
+        subtitle: "Die Steuerzentrale",
         color: "#7047a8",
         attributes: [
-          { label: "Size", value: "5 to 10 µm in diameter" },
-          { label: "Location", value: "Usually central" },
-          { label: "Visible in LM", value: "Yes" },
+          { label: "Größe", value: "5 bis 10 µm Durchmesser" },
+          { label: "Lage", value: "Meist zentral" },
+          { label: "Im Lichtmikroskop sichtbar", value: "Ja" },
         ],
         note:
-          "The nucleus is surrounded by a double membrane called the nuclear envelope, which contains pores that regulate molecular traffic.",
-        fact: "The nucleus was one of the first cell structures discovered.",
+          "Der Zellkern ist von einer Doppelmembran, der Kernhülle, umgeben. Sie enthält Poren, die den Transport von Molekülen regulieren.",
+        fact: "Der Zellkern gehört zu den ersten entdeckten Zellstrukturen.",
       },
       {
         id: "chloroplast",
         name: "Chloroplast",
-        subtitle: "The light harvester",
+        subtitle: "Der Lichtsammler",
         color: "#5fa842",
         attributes: [
-          { label: "Role", value: "Photosynthesis" },
+          { label: "Funktion", value: "Photosynthese" },
           { label: "Pigment", value: "Chlorophyll" },
-          { label: "Visible in LM", value: "Often" },
+          { label: "Im Lichtmikroskop sichtbar", value: "Oft" },
         ],
         note:
-          "Chloroplasts convert light energy into chemical energy and give many plant tissues their green color.",
-        fact: "A single leaf cell can contain dozens of chloroplasts.",
+          "Chloroplasten wandeln Lichtenergie in chemische Energie um und verleihen vielen Pflanzengeweben ihre grüne Farbe.",
+        fact: "Eine einzelne Blattzelle kann Dutzende Chloroplasten enthalten.",
       },
       {
         id: "vacuole",
-        name: "Vacuole",
-        subtitle: "The pressure reservoir",
+        name: "Vakuole",
+        subtitle: "Der Druckspeicher",
         color: "#62bdd2",
         attributes: [
-          { label: "Volume", value: "Large central space" },
-          { label: "Content", value: "Water and solutes" },
-          { label: "Function", value: "Turgor support" },
+          { label: "Volumen", value: "Großer zentraler Raum" },
+          { label: "Inhalt", value: "Wasser und gelöste Stoffe" },
+          { label: "Funktion", value: "Turgorstütze" },
         ],
         note:
-          "The central vacuole stores water, ions, and small molecules while helping the plant cell remain firm.",
-        fact: "Vacuoles can occupy most of a mature plant cell.",
+          "Die zentrale Vakuole speichert Wasser, Ionen und kleine Moleküle und hilft der Pflanzenzelle, prall zu bleiben.",
+        fact: "Vakuolen können den größten Teil einer ausgewachsenen Pflanzenzelle einnehmen.",
       },
       {
         id: "cellWall",
-        name: "Cell Wall",
-        subtitle: "The rigid frame",
+        name: "Zellwand",
+        subtitle: "Der feste Rahmen",
         color: "#7aa647",
         attributes: [
-          { label: "Material", value: "Cellulose rich" },
-          { label: "Position", value: "Outer boundary" },
-          { label: "Function", value: "Protection" },
+          { label: "Material", value: "Reich an Cellulose" },
+          { label: "Position", value: "Äußere Begrenzung" },
+          { label: "Funktion", value: "Schutz" },
         ],
         note:
-          "The cell wall gives plant cells their regular shape and protects the membrane beneath it.",
-        fact: "Cell walls help plants stand upright without a skeleton.",
+          "Die Zellwand gibt Pflanzenzellen ihre regelmäßige Form und schützt die darunterliegende Membran.",
+        fact: "Zellwände helfen Pflanzen, ohne Skelett aufrecht zu stehen.",
       },
     ],
   },
   {
     id: "whiteBlood",
-    name: "White Blood Cell",
-    type: "Immune Cell",
+    name: "Weiße Blutzelle",
+    aliases: ["Leukozyt", "Weißes Blutkörperchen", "Leukozyten"],
+    type: "Immunzelle",
     accent: "#6d78a8",
     accentSoft: "#e6eaf7",
     color: "#b9bfd7",
@@ -181,7 +185,7 @@ export const cells: CellItem[] = [
     defaultOrganelle: "lysosome",
     comparison: "epithelial",
     clinicalContext:
-      "Immune cell morphology is a bridge from basic cell biology to how clinicians interpret infection, inflammation, and blood smears.",
+      "Die Morphologie von Immunzellen verbindet die Zellbiologie mit der klinischen Beurteilung von Infektion, Entzündung und Blutausstrichen.",
     renderImage: {
       url: assetUrl("cell-renders-transparent/white-blood.png"),
       aspect: "square",
@@ -197,64 +201,65 @@ export const cells: CellItem[] = [
       materialMode: "native",
     },
     occurrence: {
-      title: "Blood, lymph, tissues",
-      body: "White blood cells move through blood and tissue spaces to identify threats and coordinate immune defense.",
+      title: "Blut, Lymphe, Gewebe",
+      body: "Weiße Blutzellen wandern durch Blut und Gewebe, erkennen Bedrohungen und koordinieren die Immunabwehr.",
       motif: "blood",
     },
     microscope: [
-      { label: "Light Microscope", tone: "#ded6e9", pattern: "blood-light" },
-      { label: "Stained Selection", tone: "#9c73be", pattern: "blood-stain" },
-      { label: "Electron Microscope", tone: "#8f8f91", pattern: "electron" },
+      { label: "Lichtmikroskop", tone: "#ded6e9", pattern: "blood-light" },
+      { label: "Gefärbtes Präparat", tone: "#9c73be", pattern: "blood-stain" },
+      { label: "Elektronenmikroskop", tone: "#8f8f91", pattern: "electron" },
     ],
     organelles: [
       {
         id: "lysosome",
-        name: "Lysosome",
-        subtitle: "The cleanup vesicle",
+        name: "Lysosom",
+        subtitle: "Das Reinigungsbläschen",
         color: "#8b54b7",
         attributes: [
-          { label: "Size", value: "About 1 µm" },
-          { label: "Content", value: "Digestive enzymes" },
-          { label: "Role", value: "Breakdown" },
+          { label: "Größe", value: "Etwa 1 µm" },
+          { label: "Inhalt", value: "Verdauungsenzyme" },
+          { label: "Funktion", value: "Abbau" },
         ],
         note:
-          "Lysosomes help immune cells digest engulfed material and recycle worn cellular components.",
-        fact: "White blood cells rely heavily on vesicles for defense.",
+          "Lysosomen helfen Immunzellen, aufgenommenes Material zu verdauen und verbrauchte Zellbestandteile zu verwerten.",
+        fact: "Weiße Blutzellen sind bei der Abwehr stark auf Vesikel angewiesen.",
       },
       {
         id: "nucleus",
-        name: "Lobed Nucleus",
-        subtitle: "Flexible genome vault",
+        name: "Gelappter Zellkern",
+        subtitle: "Der flexible Erbgut-Tresor",
         color: "#6f35a1",
         attributes: [
-          { label: "Shape", value: "Often lobed" },
-          { label: "Location", value: "Central" },
-          { label: "Visible in LM", value: "Yes, with stain" },
+          { label: "Form", value: "Oft gelappt" },
+          { label: "Lage", value: "Zentral" },
+          { label: "Im Lichtmikroskop sichtbar", value: "Ja, mit Färbung" },
         ],
         note:
-          "Many white blood cells have a lobed nucleus that helps them squeeze through tight spaces.",
-        fact: "Nuclear shape is one clue used to identify immune cell types.",
+          "Viele weiße Blutzellen haben einen gelappten Zellkern, der ihnen hilft, sich durch enge Spalten zu zwängen.",
+        fact: "Die Kernform ist ein Hinweis, um Typen von Immunzellen zu unterscheiden.",
       },
       {
         id: "granules",
-        name: "Granules",
-        subtitle: "The chemical packets",
+        name: "Granula",
+        subtitle: "Die chemischen Päckchen",
         color: "#c06696",
         attributes: [
-          { label: "Content", value: "Proteins and enzymes" },
-          { label: "Use", value: "Defense" },
-          { label: "Visibility", value: "Stain dependent" },
+          { label: "Inhalt", value: "Proteine und Enzyme" },
+          { label: "Aufgabe", value: "Abwehr" },
+          { label: "Sichtbarkeit", value: "Färbungsabhängig" },
         ],
         note:
-          "Granules store molecules that help immune cells respond quickly to infection or inflammation.",
-        fact: "Some immune cells are named by how their granules stain.",
+          "Granula speichern Moleküle, mit denen Immunzellen schnell auf Infektion oder Entzündung reagieren können.",
+        fact: "Manche Immunzellen sind nach der Anfärbbarkeit ihrer Granula benannt.",
       },
     ],
   },
   {
     id: "neuron",
     name: "Neuron",
-    type: "Nerve Cell",
+    aliases: ["Nervenzelle", "Neurone"],
+    type: "Nervenzelle",
     accent: "#6578b5",
     accentSoft: "#e4e9f8",
     color: "#8c91d0",
@@ -262,7 +267,7 @@ export const cells: CellItem[] = [
     defaultOrganelle: "axon",
     comparison: "muscle",
     clinicalContext:
-      "Neuron shape helps learners connect cell structure with bedside neuroanatomy, reflexes, sensation, and motor signaling.",
+      "Die Form von Neuronen hilft, den Zellaufbau mit klinischer Neuroanatomie, Reflexen, Sinnesempfindung und motorischer Signalübertragung zu verbinden.",
     renderImage: {
       url: assetUrl("cell-renders-transparent/neuron.png"),
       aspect: "wide",
@@ -281,64 +286,65 @@ export const cells: CellItem[] = [
       exposure: 1.05,
     },
     occurrence: {
-      title: "Brain, spinal cord, nerves",
-      body: "Neurons carry electrical and chemical signals through long branching networks.",
+      title: "Gehirn, Rückenmark, Nerven",
+      body: "Neuronen leiten elektrische und chemische Signale durch weit verzweigte Netzwerke.",
       motif: "nerve",
     },
     microscope: [
-      { label: "Light Microscope", tone: "#c9c4ed", pattern: "neuron-light" },
-      { label: "Stained Selection", tone: "#dc99cc", pattern: "neuron-stain" },
-      { label: "Electron Microscope", tone: "#8e8e94", pattern: "electron" },
+      { label: "Lichtmikroskop", tone: "#c9c4ed", pattern: "neuron-light" },
+      { label: "Gefärbtes Präparat", tone: "#dc99cc", pattern: "neuron-stain" },
+      { label: "Elektronenmikroskop", tone: "#8e8e94", pattern: "electron" },
     ],
     organelles: [
       {
         id: "axon",
         name: "Axon",
-        subtitle: "The signal highway",
+        subtitle: "Die Signalautobahn",
         color: "#6b7dc6",
         attributes: [
-          { label: "Length", value: "µm to over 1 metre" },
-          { label: "Insulation", value: "Myelin sheath" },
-          { label: "Visible in LM", value: "Yes, with stain" },
+          { label: "Länge", value: "µm bis über 1 Meter" },
+          { label: "Isolation", value: "Myelinscheide" },
+          { label: "Im Lichtmikroskop sichtbar", value: "Ja, mit Färbung" },
         ],
         note:
-          "Some axons in the human body run from the spine to the foot, making neurons among the longest cells in nature.",
-        fact: "A nerve impulse can travel at over 100 metres per second.",
+          "Manche Axone im menschlichen Körper reichen von der Wirbelsäule bis zum Fuß. Neuronen gehören damit zu den längsten Zellen überhaupt.",
+        fact: "Ein Nervenimpuls kann sich mit über 100 Metern pro Sekunde ausbreiten.",
       },
       {
         id: "soma",
         name: "Soma",
-        subtitle: "The cell body",
+        subtitle: "Der Zellkörper",
         color: "#7c52b7",
         attributes: [
-          { label: "Contains", value: "Nucleus" },
-          { label: "Role", value: "Metabolic hub" },
-          { label: "Shape", value: "Rounded" },
+          { label: "Enthält", value: "Zellkern" },
+          { label: "Funktion", value: "Stoffwechselzentrum" },
+          { label: "Form", value: "Rundlich" },
         ],
         note:
-          "The soma maintains the neuron and integrates signals arriving from branching dendrites.",
-        fact: "Most neuron proteins are made in or near the soma.",
+          "Das Soma erhält das Neuron am Leben und verrechnet die Signale, die von den verzweigten Dendriten eintreffen.",
+        fact: "Die meisten Proteine eines Neurons werden im oder nahe beim Soma gebildet.",
       },
       {
         id: "dendrites",
-        name: "Dendrites",
-        subtitle: "The receiving branches",
+        name: "Dendriten",
+        subtitle: "Die empfangenden Äste",
         color: "#7d9bcf",
         attributes: [
-          { label: "Shape", value: "Branched" },
-          { label: "Role", value: "Input" },
-          { label: "Surface", value: "Often spiny" },
+          { label: "Form", value: "Verzweigt" },
+          { label: "Funktion", value: "Eingang" },
+          { label: "Oberfläche", value: "Oft mit Dornfortsätzen" },
         ],
         note:
-          "Dendrites increase the surface area available for receiving signals from other cells.",
-        fact: "A single neuron can receive thousands of synaptic inputs.",
+          "Dendriten vergrößern die Oberfläche, an der Signale anderer Zellen empfangen werden können.",
+        fact: "Ein einzelnes Neuron kann Tausende synaptische Eingänge empfangen.",
       },
     ],
   },
   {
     id: "epithelial",
-    name: "Epithelial Cell",
-    type: "Human Tissue Cell",
+    name: "Epithelzelle",
+    aliases: ["Epithel"],
+    type: "Zelle des menschlichen Gewebes",
     accent: "#a56d7f",
     accentSoft: "#f4e2e7",
     color: "#d79baa",
@@ -346,70 +352,71 @@ export const cells: CellItem[] = [
     defaultOrganelle: "microvilli",
     comparison: "animal",
     clinicalContext:
-      "Epithelial polarity and tight junctions make this cell type central to barriers, absorption, and pathology slide interpretation.",
+      "Epithelpolarität und Tight Junctions machen diesen Zelltyp zentral für Barrieren, Resorption und die Beurteilung histologischer Schnitte.",
     renderImage: {
       url: assetUrl("cell-renders-transparent/epithelial.png"),
       aspect: "square",
     },
     occurrence: {
-      title: "Skin, intestine, airways",
-      body: "Epithelial cells form protective sheets and absorption surfaces across the body.",
+      title: "Haut, Darm, Atemwege",
+      body: "Epithelzellen bilden im ganzen Körper schützende Zellschichten und Resorptionsflächen.",
       motif: "surface",
     },
     microscope: [
-      { label: "Light Microscope", tone: "#e6a4bd", pattern: "tissue-light" },
-      { label: "Stained Selection", tone: "#cb72a4", pattern: "tissue-stain" },
-      { label: "Electron Microscope", tone: "#989899", pattern: "electron" },
+      { label: "Lichtmikroskop", tone: "#e6a4bd", pattern: "tissue-light" },
+      { label: "Gefärbtes Präparat", tone: "#cb72a4", pattern: "tissue-stain" },
+      { label: "Elektronenmikroskop", tone: "#989899", pattern: "electron" },
     ],
     organelles: [
       {
         id: "microvilli",
-        name: "Microvilli",
-        subtitle: "The absorption brush",
+        name: "Mikrovilli",
+        subtitle: "Der Resorptionssaum",
         color: "#c86f80",
         attributes: [
-          { label: "Length", value: "0.5 to 1 µm" },
-          { label: "Location", value: "Apical surface" },
-          { label: "Role", value: "Surface area" },
+          { label: "Länge", value: "0,5 bis 1 µm" },
+          { label: "Lage", value: "Apikale Oberfläche" },
+          { label: "Funktion", value: "Oberflächenvergrößerung" },
         ],
         note:
-          "Microvilli increase surface area for absorption and secretion along epithelial sheets.",
-        fact: "Intestinal microvilli form a dense brush border.",
+          "Mikrovilli vergrößern die Oberfläche für Resorption und Sekretion entlang von Epithelschichten.",
+        fact: "Die Mikrovilli im Darm bilden einen dichten Bürstensaum.",
       },
       {
         id: "junctions",
         name: "Tight Junctions",
-        subtitle: "The sealed seams",
+        subtitle: "Die dichten Nähte",
         color: "#9f6cbd",
         attributes: [
-          { label: "Position", value: "Between cells" },
-          { label: "Role", value: "Barrier" },
-          { label: "Visibility", value: "EM preferred" },
+          { label: "Position", value: "Zwischen den Zellen" },
+          { label: "Funktion", value: "Barriere" },
+          { label: "Sichtbarkeit", value: "Besser im Elektronenmikroskop" },
         ],
         note:
-          "Tight junctions link neighboring epithelial cells and control what passes between them.",
-        fact: "Epithelial barriers are essential for organ boundaries.",
+          "Tight Junctions verbinden benachbarte Epithelzellen und steuern, was zwischen ihnen hindurchtreten kann.",
+        fact: "Epithelbarrieren sind für die Abgrenzung von Organen unverzichtbar.",
       },
       {
         id: "nucleus",
-        name: "Nucleus",
-        subtitle: "The instruction store",
+        name: "Zellkern",
+        subtitle: "Der Anweisungsspeicher",
         color: "#7a4aa2",
         attributes: [
-          { label: "Position", value: "Basal to central" },
-          { label: "Shape", value: "Oval" },
-          { label: "Visible in LM", value: "Yes" },
+          { label: "Position", value: "Basal bis zentral" },
+          { label: "Form", value: "Oval" },
+          { label: "Im Lichtmikroskop sichtbar", value: "Ja" },
         ],
         note:
-          "The epithelial nucleus stores genetic information and changes position depending on tissue shape.",
-        fact: "Nuclear shape helps pathologists read tissue samples.",
+          "Der Zellkern der Epithelzelle speichert die Erbinformation und liegt je nach Gewebeform an unterschiedlicher Stelle.",
+        fact: "Die Kernform hilft Pathologen bei der Beurteilung von Gewebeproben.",
       },
     ],
   },
   {
     id: "bacteria",
-    name: "Bacteria Cell",
-    type: "Prokaryotic Cell",
+    name: "Bakterienzelle",
+    aliases: ["Bakterium", "Bakterien", "Bakterielle Zelle"],
+    type: "Prokaryotische Zelle",
     accent: "#48a77d",
     accentSoft: "#dbf1e7",
     color: "#65b8ae",
@@ -417,7 +424,7 @@ export const cells: CellItem[] = [
     defaultOrganelle: "nucleoid",
     comparison: "animal",
     clinicalContext:
-      "Cell wall structure provides a clinically relevant path from microscopy and Gram staining to antimicrobial mechanism discussions.",
+      "Der Aufbau der Zellwand führt klinisch relevant von der Mikroskopie und der Gram-Färbung zu den Wirkmechanismen antibakterieller Substanzen.",
     renderImage: {
       url: assetUrl("cell-renders-transparent/bacteria.png"),
       aspect: "landscape",
@@ -436,64 +443,65 @@ export const cells: CellItem[] = [
       exposure: 1.1,
     },
     occurrence: {
-      title: "Soil, water, gut, skin",
-      body: "Bacteria live in nearly every environment and can exist as independent single cells.",
+      title: "Boden, Wasser, Darm, Haut",
+      body: "Bakterien leben in nahezu jeder Umgebung und können als selbstständige Einzelzellen existieren.",
       motif: "microbe",
     },
     microscope: [
-      { label: "Light Microscope", tone: "#c7b8eb", pattern: "bacteria-light" },
-      { label: "Stained Selection", tone: "#dc6e96", pattern: "bacteria-stain" },
-      { label: "Electron Microscope", tone: "#8c8c8c", pattern: "electron" },
+      { label: "Lichtmikroskop", tone: "#c7b8eb", pattern: "bacteria-light" },
+      { label: "Gefärbtes Präparat", tone: "#dc6e96", pattern: "bacteria-stain" },
+      { label: "Elektronenmikroskop", tone: "#8c8c8c", pattern: "electron" },
     ],
     organelles: [
       {
         id: "nucleoid",
-        name: "Nucleoid",
-        subtitle: "The naked genome",
+        name: "Nukleoid",
+        subtitle: "Das nackte Erbgut",
         color: "#7a43ad",
         attributes: [
-          { label: "Size", value: "About 1 µm region" },
-          { label: "Membrane", value: "None" },
-          { label: "Visible in LM", value: "No, EM only" },
+          { label: "Größe", value: "Bereich von etwa 1 µm" },
+          { label: "Membran", value: "Keine" },
+          { label: "Im Lichtmikroskop sichtbar", value: "Nein, nur im Elektronenmikroskop" },
         ],
         note:
-          "Unlike eukaryotic cells, bacteria have no nuclear envelope. Their DNA floats in a cytoplasm region called the nucleoid.",
-        fact: "There are more bacterial cells in your body than many people expect.",
+          "Anders als eukaryotische Zellen haben Bakterien keine Kernhülle. Ihre DNA liegt in einem Bereich des Zytoplasmas, dem Nukleoid.",
+        fact: "Im menschlichen Körper leben mehr Bakterienzellen, als viele vermuten.",
       },
       {
         id: "cellWall",
-        name: "Cell Wall",
-        subtitle: "The protective shell",
+        name: "Zellwand",
+        subtitle: "Die Schutzhülle",
         color: "#55aa89",
         attributes: [
-          { label: "Material", value: "Peptidoglycan" },
-          { label: "Role", value: "Shape and defense" },
-          { label: "Position", value: "Outside membrane" },
+          { label: "Material", value: "Peptidoglykan" },
+          { label: "Funktion", value: "Form und Schutz" },
+          { label: "Position", value: "Außerhalb der Membran" },
         ],
         note:
-          "The bacterial cell wall helps cells resist pressure and gives many species their characteristic shapes.",
-        fact: "Gram staining reveals differences in bacterial wall structure.",
+          "Die bakterielle Zellwand hilft den Zellen, Druck standzuhalten, und gibt vielen Arten ihre charakteristische Form.",
+        fact: "Die Gram-Färbung macht Unterschiede im Aufbau der Bakterienzellwand sichtbar.",
       },
       {
         id: "flagellum",
-        name: "Flagellum",
-        subtitle: "The swimming tail",
+        name: "Geißel",
+        subtitle: "Der Schwimmschwanz",
         color: "#b87438",
         attributes: [
-          { label: "Role", value: "Movement" },
-          { label: "Shape", value: "Helical filament" },
-          { label: "Visible in LM", value: "Special stain" },
+          { label: "Funktion", value: "Fortbewegung" },
+          { label: "Form", value: "Schraubenförmiges Filament" },
+          { label: "Im Lichtmikroskop sichtbar", value: "Spezialfärbung" },
         ],
         note:
-          "Some bacteria rotate flagella like tiny motors to move through liquid environments.",
-        fact: "Bacterial flagella are powered by ion gradients.",
+          "Manche Bakterien drehen ihre Geißeln wie winzige Motoren, um sich durch Flüssigkeiten zu bewegen.",
+        fact: "Bakterielle Geißeln werden durch Ionengradienten angetrieben.",
       },
     ],
   },
   {
     id: "animal",
-    name: "Animal Cell",
-    type: "Eukaryotic Cell",
+    name: "Tierzelle",
+    aliases: ["Tierische Zelle"],
+    type: "Eukaryotische Zelle",
     accent: "#9b74b7",
     accentSoft: "#efe5f6",
     color: "#9db6dc",
@@ -501,7 +509,7 @@ export const cells: CellItem[] = [
     defaultOrganelle: "mitochondrion",
     comparison: "plant",
     clinicalContext:
-      "This general eukaryotic model helps learners anchor organelle functions before applying them to human tissues and disease mechanisms.",
+      "Dieses allgemeine eukaryotische Modell hilft, die Funktionen der Organellen zu verankern, bevor sie auf menschliche Gewebe und Krankheitsmechanismen übertragen werden.",
     renderImage: {
       url: assetUrl("cell-renders-transparent/animal.png"),
       aspect: "square",
@@ -520,64 +528,65 @@ export const cells: CellItem[] = [
       exposure: 1.12,
     },
     occurrence: {
-      title: "Animal tissues",
-      body: "Animal cells form flexible tissues with membranes, internal organelles, and specialized signaling structures.",
+      title: "Tierische Gewebe",
+      body: "Tierzellen bilden flexible Gewebe mit Membranen, inneren Organellen und spezialisierten Strukturen zur Signalübertragung.",
       motif: "animal",
     },
     microscope: [
-      { label: "Light Microscope", tone: "#d9a7c7", pattern: "animal-light" },
-      { label: "Stained Selection", tone: "#b889da", pattern: "animal-stain" },
-      { label: "Electron Microscope", tone: "#8b8b8d", pattern: "electron" },
+      { label: "Lichtmikroskop", tone: "#d9a7c7", pattern: "animal-light" },
+      { label: "Gefärbtes Präparat", tone: "#b889da", pattern: "animal-stain" },
+      { label: "Elektronenmikroskop", tone: "#8b8b8d", pattern: "electron" },
     ],
     organelles: [
       {
         id: "mitochondrion",
-        name: "Mitochondrion",
-        subtitle: "The energy converter",
+        name: "Mitochondrium",
+        subtitle: "Der Energiewandler",
         color: "#cf6f42",
         attributes: [
-          { label: "Length", value: "1 to 10 µm" },
-          { label: "Membrane", value: "Double" },
-          { label: "Role", value: "ATP production" },
+          { label: "Länge", value: "1 bis 10 µm" },
+          { label: "Membran", value: "Doppelt" },
+          { label: "Funktion", value: "ATP-Produktion" },
         ],
         note:
-          "Mitochondria convert fuel molecules into usable cellular energy through folded inner membranes.",
-        fact: "Mitochondria contain their own small DNA genome.",
+          "Mitochondrien wandeln Nährstoffmoleküle über ihre gefalteten inneren Membranen in nutzbare Zellenergie um.",
+        fact: "Mitochondrien besitzen ein eigenes kleines DNA-Genom.",
       },
       {
         id: "nucleus",
-        name: "Nucleus",
-        subtitle: "The command room",
+        name: "Zellkern",
+        subtitle: "Die Kommandozentrale",
         color: "#7a49b0",
         attributes: [
-          { label: "Shape", value: "Rounded" },
-          { label: "Membrane", value: "Double" },
-          { label: "Visible in LM", value: "Yes" },
+          { label: "Form", value: "Rundlich" },
+          { label: "Membran", value: "Doppelt" },
+          { label: "Im Lichtmikroskop sichtbar", value: "Ja" },
         ],
         note:
-          "The nucleus stores chromosomes and regulates which genes are active in a cell.",
-        fact: "Not all animal cells keep a nucleus. Mature red blood cells lose theirs.",
+          "Der Zellkern enthält die Chromosomen und steuert, welche Gene in einer Zelle aktiv sind.",
+        fact: "Nicht alle tierischen Zellen behalten ihren Zellkern. Reife rote Blutkörperchen verlieren ihn.",
       },
       {
         id: "golgi",
-        name: "Golgi Apparatus",
-        subtitle: "The packaging stack",
+        name: "Golgi-Apparat",
+        subtitle: "Der Verpackungsstapel",
         color: "#d49057",
         attributes: [
-          { label: "Shape", value: "Flattened stacks" },
-          { label: "Role", value: "Modify and sort" },
-          { label: "Position", value: "Near nucleus" },
+          { label: "Form", value: "Abgeflachte Stapel" },
+          { label: "Funktion", value: "Modifizieren und sortieren" },
+          { label: "Position", value: "Nahe am Zellkern" },
         ],
         note:
-          "The Golgi apparatus modifies, sorts, and ships proteins and lipids to their destinations.",
-        fact: "Secretory cells often have a prominent Golgi apparatus.",
+          "Der Golgi-Apparat modifiziert und sortiert Proteine und Lipide und versendet sie an ihre Zielorte.",
+        fact: "Sekretorische Zellen haben oft einen auffällig ausgeprägten Golgi-Apparat.",
       },
     ],
   },
   {
     id: "muscle",
-    name: "Muscle Cell",
-    type: "Muscle Fiber",
+    name: "Muskelzelle",
+    aliases: ["Muskelfaser", "Myozyt"],
+    type: "Muskelfaser",
     accent: "#bd514d",
     accentSoft: "#f5dfdc",
     color: "#ca6678",
@@ -585,63 +594,63 @@ export const cells: CellItem[] = [
     defaultOrganelle: "myofibril",
     comparison: "neuron",
     clinicalContext:
-      "Muscle fiber architecture links microscopic structure with contraction, fatigue, rehabilitation, and neuromuscular disease teaching.",
+      "Der Aufbau der Muskelfaser verbindet die mikroskopische Struktur mit Kontraktion, Ermüdung, Rehabilitation und neuromuskulären Erkrankungen.",
     renderImage: {
       url: assetUrl("cell-renders-transparent/muscle.png"),
       aspect: "wide",
     },
     occurrence: {
-      title: "Skeletal muscles",
-      body: "Muscle fibers contain repeating contractile bundles that shorten to generate force.",
+      title: "Skelettmuskulatur",
+      body: "Muskelfasern enthalten sich wiederholende kontraktile Bündel, die sich verkürzen und so Kraft erzeugen.",
       motif: "muscle",
     },
     microscope: [
-      { label: "Light Microscope", tone: "#ef9aab", pattern: "muscle-light" },
-      { label: "Stained Selection", tone: "#c7508d", pattern: "muscle-stain" },
-      { label: "Electron Microscope", tone: "#8d8d8d", pattern: "electron" },
+      { label: "Lichtmikroskop", tone: "#ef9aab", pattern: "muscle-light" },
+      { label: "Gefärbtes Präparat", tone: "#c7508d", pattern: "muscle-stain" },
+      { label: "Elektronenmikroskop", tone: "#8d8d8d", pattern: "electron" },
     ],
     organelles: [
       {
         id: "myofibril",
-        name: "Myofibril",
-        subtitle: "The contracting thread",
+        name: "Myofibrille",
+        subtitle: "Der kontrahierende Faden",
         color: "#bd3d51",
         attributes: [
-          { label: "Diameter", value: "About 1 µm" },
-          { label: "Arrangement", value: "Striated bundles" },
-          { label: "Visible in LM", value: "Yes, banded" },
+          { label: "Durchmesser", value: "Etwa 1 µm" },
+          { label: "Anordnung", value: "Quergestreifte Bündel" },
+          { label: "Im Lichtmikroskop sichtbar", value: "Ja, mit Querstreifung" },
         ],
         note:
-          "Each muscle fiber contains hundreds to thousands of myofibrils running its full length, packed tightly together.",
-        fact: "A single muscle fiber can be up to 30 cm long.",
+          "Jede Muskelfaser enthält Hunderte bis Tausende Myofibrillen, die über ihre gesamte Länge verlaufen und dicht gepackt sind.",
+        fact: "Eine einzelne Muskelfaser kann bis zu 30 cm lang werden.",
       },
       {
         id: "sarcolemma",
-        name: "Sarcolemma",
-        subtitle: "The excitable membrane",
+        name: "Sarkolemm",
+        subtitle: "Die erregbare Membran",
         color: "#d7b284",
         attributes: [
-          { label: "Position", value: "Outer surface" },
-          { label: "Role", value: "Signal spread" },
-          { label: "Type", value: "Cell membrane" },
+          { label: "Position", value: "Äußere Oberfläche" },
+          { label: "Funktion", value: "Signalausbreitung" },
+          { label: "Art", value: "Zellmembran" },
         ],
         note:
-          "The sarcolemma conducts electrical signals that trigger contraction throughout the muscle fiber.",
-        fact: "Membrane signals reach deep into fibers through T tubules.",
+          "Das Sarkolemm leitet elektrische Signale, die in der gesamten Muskelfaser die Kontraktion auslösen.",
+        fact: "Über die T-Tubuli gelangen Membransignale tief in die Fasern.",
       },
       {
         id: "mitochondria",
-        name: "Mitochondria",
-        subtitle: "The endurance supply",
+        name: "Mitochondrien",
+        subtitle: "Die Ausdauerversorgung",
         color: "#cf7042",
         attributes: [
-          { label: "Role", value: "Energy supply" },
-          { label: "Position", value: "Between fibers" },
-          { label: "Density", value: "Activity dependent" },
+          { label: "Funktion", value: "Energieversorgung" },
+          { label: "Position", value: "Zwischen den Fasern" },
+          { label: "Dichte", value: "Aktivitätsabhängig" },
         ],
         note:
-          "Muscle cells need many mitochondria because contraction consumes large amounts of ATP.",
-        fact: "Endurance training can increase mitochondrial density.",
+          "Muskelzellen brauchen viele Mitochondrien, weil die Kontraktion große Mengen ATP verbraucht.",
+        fact: "Ausdauertraining kann die Dichte der Mitochondrien erhöhen.",
       },
     ],
   },
@@ -652,32 +661,32 @@ export function getCellById(id: string) {
 }
 
 export type CellCategory =
-  | "Cells"
-  | "Organs"
-  | "Body Systems"
-  | "Bones & Joints"
-  | "Macromolecules"
-  | "Viruses"
-  | "Botanical Specimens";
+  | "Zellen"
+  | "Organe"
+  | "Organsysteme"
+  | "Knochen & Gelenke"
+  | "Makromoleküle"
+  | "Viren"
+  | "Botanische Präparate";
 
 export const CELL_CATEGORY_ORDER: CellCategory[] = [
-  "Cells",
-  "Organs",
-  "Body Systems",
-  "Bones & Joints",
-  "Macromolecules",
-  "Viruses",
-  "Botanical Specimens",
+  "Zellen",
+  "Organe",
+  "Organsysteme",
+  "Knochen & Gelenke",
+  "Makromoleküle",
+  "Viren",
+  "Botanische Präparate",
 ];
 
 export function categorize(cell: CellItem): CellCategory {
   const t = cell.type.toLowerCase();
-  if (t.includes("virus")) return "Viruses";
-  if (t.includes("botanical") || t.includes("pollen")) return "Botanical Specimens";
-  if (t.includes("macromolecule")) return "Macromolecules";
-  if (t.includes("bone") || t.includes("joint")) return "Bones & Joints";
-  if (t.includes("system")) return "Body Systems";
-  if (t.includes("cell") || t.includes("fiber")) return "Cells";
-  if (t.includes("organ")) return "Organs";
-  return "Cells";
+  if (t.includes("virus") || t.includes("viren")) return "Viren";
+  if (t.includes("botan") || t.includes("pollen")) return "Botanische Präparate";
+  if (t.includes("makromolek")) return "Makromoleküle";
+  if (t.includes("knochen") || t.includes("gelenk")) return "Knochen & Gelenke";
+  if (t.includes("system")) return "Organsysteme";
+  if (t.includes("zelle") || t.includes("faser")) return "Zellen";
+  if (t.includes("organ")) return "Organe";
+  return "Zellen";
 }

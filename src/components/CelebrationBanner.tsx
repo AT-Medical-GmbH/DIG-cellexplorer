@@ -32,8 +32,8 @@ export function CelebrationBanner({ celebration }: { celebration: Celebration | 
         <div className="celebration-card celebration-level">
           <Sparkles size={28} />
           <div>
-            <strong>Level up!</strong>
-            <span>You reached level {celebration.level}</span>
+            <strong>Stufe aufgestiegen!</strong>
+            <span>Sie haben Stufe {celebration.level} erreicht</span>
           </div>
         </div>
       </div>

@@ -18,7 +18,7 @@ export function Modal({ open, onClose, label, panelClassName, children }: ModalP
   return (
     <div className="modal-layer" role="dialog" aria-modal="true" aria-label={label}>
       <div className={panelClassName}>
-        <button className="modal-close" type="button" onClick={onClose} aria-label="Close">
+        <button className="modal-close" type="button" onClick={onClose} aria-label="Schließen">
           <X size={18} />
         </button>
         {children}

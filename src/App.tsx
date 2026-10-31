@@ -54,7 +54,7 @@ export default function App() {
   );
   const overlays = useOverlays();
   const [tutorPrompt, setTutorPrompt] = useState(
-    `Guide me through finding ${initialCell.organelles[0].name} inside the 3D model.`,
+    `Finden Sie „${initialCell.organelles[0].name}“ im 3D-Modell und beschreiben Sie Form und Lage.`,
   );
   const [toast, setToast] = useState<string | null>(null);
   const [recentIds, setRecentIds] = useState<string[]>(() => loadRecentIds());
@@ -162,11 +162,11 @@ export default function App() {
     onFavorite: () => toggleFavorite(selectedCellId),
     onReset: () => {
       setResetKey((key) => key + 1);
-      showToast("View reset.");
+      showToast("Ansicht zurückgesetzt.");
     },
     onToggleRotate: () => {
       setAutoRotate((v) => {
-        showToast(v ? "Auto-rotate off." : "Auto-rotate on.");
+        showToast(v ? "Automatische Drehung aus." : "Automatische Drehung an.");
         return !v;
       });
     },
@@ -174,7 +174,7 @@ export default function App() {
       const pool = cells.filter((c) => c.id !== selectedCellId);
       const pick = pool[Math.floor(Math.random() * pool.length)];
       setSelectedCellId(pick.id);
-      showToast(`Surprise — ${pick.name}!`);
+      showToast(`Überraschung – ${pick.name}!`);
     },
     onGallery: () => overlays.open("gallery"),
     onLibrary: () => overlays.open("library"),
@@ -216,14 +216,14 @@ export default function App() {
         onReplayIntro={() => overlays.open("welcome")}
         onClearFavorites={() => {
           setFavorites(new Set());
-          showToast("Cleared all favorites.");
+          showToast("Alle Favoriten gelöscht.");
         }}
         onResetAll={() => {
           clearAllData();
           resetProgress();
           setFavorites(new Set());
           setRecentIds([]);
-          showToast("All saved data reset.");
+          showToast("Alle gespeicherten Daten zurückgesetzt.");
         }}
       />
 
@@ -251,9 +251,9 @@ export default function App() {
                 if (!dailyClaimed && claimDaily()) {
                   setDailyClaimed(true);
                   fire({ type: "bonus", amount: 15 });
-                  showToast(`Daily specimen — ${dailyCell.name}! +15 XP`);
+                  showToast(`Tagespräparat – ${dailyCell.name}! +15 XP`);
                 } else {
-                  showToast(`Loaded ${dailyCell.name} on stage.`);
+                  showToast(`${dailyCell.name} geladen.`);
                 }
               }}
             />
@@ -273,7 +273,7 @@ export default function App() {
             onAutoRotateChange={setAutoRotate}
             onReset={() => {
               setResetKey((key) => key + 1);
-              showToast("View reset.");
+              showToast("Ansicht zurückgesetzt.");
             }}
             onToast={showToast}
           />
@@ -282,7 +282,7 @@ export default function App() {
             onCompare={() => {
               overlays.open("comparison");
               showToast(
-                `Opened comparison: ${selectedCell.name} vs ${getCellById(selectedCell.comparison).name}.`,
+                `Vergleich geöffnet: ${selectedCell.name} und ${getCellById(selectedCell.comparison).name}.`,
               );
             }}
             onToast={showToast}
@@ -302,11 +302,11 @@ export default function App() {
             const wasOn = favorites.has(id);
             toggleFavorite(id);
             const name = getCellById(id).name;
-            showToast(wasOn ? `Removed ${name} from favorites.` : `Added ${name} to favorites.`);
+            showToast(wasOn ? `${name} aus den Favoriten entfernt.` : `${name} zu den Favoriten hinzugefügt.`);
           }}
           onTutorPrompt={(prompt) => {
             setTutorPrompt(prompt);
-            showToast("AI tutor prompt staged.");
+            showToast("Lernimpuls ausgewählt.");
           }}
         />
       </div>
@@ -316,17 +316,17 @@ export default function App() {
         open={overlays.isOpen("comparison")}
         onClose={() => {
           overlays.close();
-          showToast("Closed comparison view.");
+          showToast("Vergleichsansicht geschlossen.");
         }}
       />
       {overlays.isOpen("quiz") && (
-        <Suspense fallback={<div className="quiz-layer quiz-loading">Loading quiz…</div>}>
+        <Suspense fallback={<div className="quiz-layer quiz-loading">Quiz wird geladen …</div>}>
           <SpecimenQuiz
             onExit={() => overlays.close()}
             onStudySpecimen={(id) => {
               setSelectedCellId(id);
               overlays.close();
-              showToast(`Loaded ${getCellById(id).name} on stage.`);
+              showToast(`${getCellById(id).name} geladen.`);
             }}
             onCorrect={(streak) => fire({ type: "quizCorrect", streak })}
             onComplete={(score, total, bestStreak, perfect) =>
@@ -338,41 +338,41 @@ export default function App() {
       <AboutModal open={overlays.isOpen("about")} onClose={overlays.close} />
 
       <SpecimenGridModal
-        title="Gallery"
-        subtitle={`Browse all ${cells.length} specimens`}
+        title="Galerie"
+        subtitle={`Alle ${cells.length} Präparate durchsuchen`}
         open={overlays.isOpen("gallery")}
         searchable
         selectedId={selectedCellId}
-        sections={[{ label: "All specimens", items: cells }]}
+        sections={[{ label: "Alle Präparate", items: cells }]}
         onSelect={(id) => {
           setSelectedCellId(id);
           overlays.close();
-          showToast(`Loaded ${getCellById(id).name} on stage.`);
+          showToast(`${getCellById(id).name} geladen.`);
         }}
         onClose={() => overlays.close()}
       />
 
       <SpecimenGridModal
-        title="Your Library"
-        subtitle="Favorites and recently viewed specimens"
+        title="Meine Bibliothek"
+        subtitle="Favoriten und zuletzt angesehene Präparate"
         open={overlays.isOpen("library")}
         selectedId={selectedCellId}
         sections={[
           {
-            label: "Favorites",
+            label: "Favoriten",
             items: cells.filter((c) => favorites.has(c.id)),
-            emptyHint: "No favorites yet — tap the star on a specimen.",
+            emptyHint: "Noch keine Favoriten – tippen Sie bei einem Präparat auf den Stern.",
           },
           {
-            label: "Recently viewed",
+            label: "Zuletzt angesehen",
             items: recentIds.map(getCellById),
-            emptyHint: "Specimens you open will appear here.",
+            emptyHint: "Geöffnete Präparate erscheinen hier.",
           },
         ]}
         onSelect={(id) => {
           setSelectedCellId(id);
           overlays.close();
-          showToast(`Loaded ${getCellById(id).name} on stage.`);
+          showToast(`${getCellById(id).name} geladen.`);
         }}
         onClose={() => overlays.close()}
       />
@@ -389,7 +389,7 @@ export default function App() {
         onClose={() => overlays.close()}
         onStudySpecimen={(id) => {
           setSelectedCellId(id);
-          showToast(`Loaded ${getCellById(id).name} on stage.`);
+          showToast(`${getCellById(id).name} geladen.`);
         }}
       />
 

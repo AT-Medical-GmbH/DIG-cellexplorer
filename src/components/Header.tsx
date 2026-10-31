@@ -58,11 +58,11 @@ export function Header({
   const [menuOpen, setMenuOpen] = useState(false);
 
   const navItems: { id: string; label: string; Icon: LucideIcon; onClick: () => void }[] = [
-    { id: "gallery", label: "Gallery", Icon: Grid3X3, onClick: onGallery },
-    { id: "library", label: "Library", Icon: Library, onClick: onLibrary },
-    { id: "cards", label: "Cards", Icon: Layers, onClick: onFlashcards },
-    { id: "notebooks", label: "Notebooks", Icon: BookOpen, onClick: onNotebooks },
-    { id: "about", label: "About", Icon: Info, onClick: onAbout },
+    { id: "gallery", label: "Galerie", Icon: Grid3X3, onClick: onGallery },
+    { id: "library", label: "Bibliothek", Icon: Library, onClick: onLibrary },
+    { id: "cards", label: "Karten", Icon: Layers, onClick: onFlashcards },
+    { id: "notebooks", label: "Notizbücher", Icon: BookOpen, onClick: onNotebooks },
+    { id: "about", label: "Info", Icon: Info, onClick: onAbout },
   ];
 
   return (
@@ -77,11 +77,11 @@ export function Header({
         />
         <div>
           <h1>Cell Explorer</h1>
-          <p>Explore life at the microscopic level</p>
+          <p>Zellbiologie in 3D erkunden</p>
         </div>
       </div>
 
-      <nav className="top-nav" aria-label="Primary">
+      <nav className="top-nav" aria-label="Hauptnavigation">
         <XpBar progress={progress} pulse={xpPulse} />
         {navItems.map(({ id, label, Icon, onClick }) => (
           <button key={id} type="button" onClick={onClick}>
@@ -97,7 +97,7 @@ export function Header({
           <button
             className="avatar-button"
             type="button"
-            aria-label="User menu"
+            aria-label="Benutzermenü"
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((v) => !v)}
           >

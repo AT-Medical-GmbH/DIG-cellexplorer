@@ -17,10 +17,10 @@ type RightPanelProps = {
 
 function buildTutorPrompts(cell: CellItem, organelle: CellItem["organelles"][number]) {
   return [
-    `Explain how ${organelle.name} helps a ${cell.name} stay alive.`,
-    `Quiz me on the visual differences between ${cell.name} and ${getCellById(cell.comparison).name}.`,
-    `Guide me through finding ${organelle.name} inside the 3D model.`,
-    `Connect ${cell.name} structure to one clinical observation without giving medical advice.`,
+    `Erklären Sie: Welche Aufgabe hat „${organelle.name}“ in der Zelle „${cell.name}“?`,
+    `Nennen Sie drei sichtbare Unterschiede zwischen „${cell.name}“ und „${getCellById(cell.comparison).name}“.`,
+    `Finden Sie „${organelle.name}“ im 3D-Modell und beschreiben Sie Form und Lage.`,
+    `Verbinden Sie den Aufbau von „${cell.name}“ mit einer klinischen Beobachtung (nur zum Lernen, keine medizinische Beratung).`,
   ];
 }
 
@@ -43,12 +43,12 @@ export function RightPanel({
     <aside className="right-rail">
       <section className="panel details-panel">
         <div className="panel-heading detail-heading">
-          <span>Organelle Details</span>
+          <span>Organell-Details</span>
           <button
             type="button"
             onClick={() => onToggleFavorite(cell.id)}
-            aria-label="Toggle favorite"
-            title={favorites.has(cell.id) ? "Remove from favorites" : "Add to favorites"}
+            aria-label="Favorit umschalten"
+            title={favorites.has(cell.id) ? "Aus Favoriten entfernen" : "Zu Favoriten hinzufügen"}
           >
             <Heart size={22} fill={favorites.has(cell.id) ? "currentColor" : "none"} />
           </button>
@@ -70,7 +70,7 @@ export function RightPanel({
             </div>
           ))}
           <div>
-            <dt>Label</dt>
+            <dt>Beschriftung</dt>
             <dd>
               <span className="mini-toggle is-on" />
               <span className="detail-dot" style={{ background: organelle.color }} />
@@ -81,17 +81,17 @@ export function RightPanel({
 
       <section className="panel notes-panel">
         <div className="panel-heading">
-          <span>Biological Notes</span>
+          <span>Biologische Hinweise</span>
         </div>
         <p>{organelle.note}</p>
         {cell.clinicalContext && (
           <div className="clinical-context">
-            <span>Clinical Context</span>
+            <span>Klinischer Bezug</span>
             <p>{cell.clinicalContext}</p>
           </div>
         )}
         <div className="fun-fact">
-          <span>Fun Fact: {organelle.fact}</span>
+          <span>Wussten Sie? {organelle.fact}</span>
           <Sparkles size={18} />
         </div>
       </section>
@@ -100,31 +100,31 @@ export function RightPanel({
         <div className="panel-heading">
           <span>
             <Brain size={17} />
-            AI Tutor
+            Lernimpulse
           </span>
         </div>
 
         <div className="mastery-meter" style={{ "--progress": `${mastery}%` } as CSSProperties}>
           <div>
             <Gauge size={18} />
-            <span>Mastery</span>
+            <span>Lernfortschritt</span>
             <strong>{mastery}%</strong>
           </div>
           <i>
             <b />
           </i>
           <small>
-            {viewedCellCount}/{cells.length} cells explored · {viewedOrganelleCount}/{totalOrganelleCount} organelles inspected
+            {viewedCellCount}/{cells.length} Zellen erkundet · {viewedOrganelleCount}/{totalOrganelleCount} Organellen betrachtet
           </small>
         </div>
 
         <div className="lesson-focus">
           <span>
             <Target size={17} />
-            Current lesson focus
+            Aktueller Lernfokus
           </span>
           <p>
-            Locate <strong>{organelle.name}</strong>, explain its role, then compare it with the matching structure in{" "}
+            Finden Sie <strong>{organelle.name}</strong>, erklären Sie die Funktion und vergleichen Sie sie mit der entsprechenden Struktur bei{" "}
             {getCellById(cell.comparison).name}.
           </p>
         </div>
@@ -132,7 +132,7 @@ export function RightPanel({
         <div className="tutor-prompt">
           <span>
             <MessageCircle size={17} />
-            Prompt staged for AI tutor
+            Ausgewählter Impuls
           </span>
           <p>{tutorPrompt}</p>
         </div>
@@ -148,7 +148,7 @@ export function RightPanel({
 
       <section className="panel occurrence-panel">
         <div className="panel-heading">
-          <span>Where It Occurs</span>
+          <span>Vorkommen</span>
         </div>
         <div className={`occurrence-art occurrence-${cell.occurrence.motif}`}>
           <span />

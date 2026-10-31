@@ -23,13 +23,13 @@ export function NotebooksModal({ open, currentCell, onSelect, onClose }: Noteboo
   }
 
   return (
-    <Modal open={open} onClose={onClose} label="Notebooks" panelClassName="browser-modal notebooks-modal">
+    <Modal open={open} onClose={onClose} label="Notizbücher" panelClassName="browser-modal notebooks-modal">
         <div className="browser-head">
           <div>
             <h3>
-              <BookOpen size={20} /> Notebooks
+              <BookOpen size={20} /> Notizbücher
             </h3>
-            <p>Personal notes saved in your browser, per specimen.</p>
+            <p>Persönliche Notizen je Präparat, nur in diesem Browser gespeichert.</p>
           </div>
         </div>
 
@@ -46,12 +46,12 @@ export function NotebooksModal({ open, currentCell, onSelect, onClose }: Noteboo
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
             onBlur={persist}
-            placeholder={`Write notes about ${currentCell.name}…`}
-            aria-label={`Notes for ${currentCell.name}`}
+            placeholder={`Notizen zu „${currentCell.name}“ …`}
+            aria-label={`Notizen zu ${currentCell.name}`}
           />
           <div className="notebook-actions">
             <button type="button" className="quiz-primary" onClick={persist}>
-              Save note
+              Notiz speichern
             </button>
             <button
               type="button"
@@ -61,7 +61,7 @@ export function NotebooksModal({ open, currentCell, onSelect, onClose }: Noteboo
                 setNotes(saveNote(currentCell.id, ""));
               }}
             >
-              Clear
+              Leeren
             </button>
           </div>
         </div>
@@ -69,7 +69,7 @@ export function NotebooksModal({ open, currentCell, onSelect, onClose }: Noteboo
         {otherNoteIds.length > 0 && (
           <div className="browser-section">
             <div className="browser-section-title">
-              Other notes
+              Weitere Notizen
               <span className="browser-section-count">{otherNoteIds.length}</span>
             </div>
             <div className="notebook-list">
@@ -84,7 +84,7 @@ export function NotebooksModal({ open, currentCell, onSelect, onClose }: Noteboo
                       onSelect(id);
                       onClose();
                     }}
-                    title={`Open ${cell.name}`}
+                    title={`${cell.name} öffnen`}
                   >
                     <MiniCell cell={cell} />
                     <span className="notebook-list-copy">

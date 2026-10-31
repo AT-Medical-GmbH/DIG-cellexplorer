@@ -7,23 +7,23 @@ type Step = { Icon: LucideIcon; title: string; body: string };
 const STEPS: Step[] = [
   {
     Icon: Sparkles,
-    title: "Welcome to Cell Explorer",
-    body: "Explore seven interactive cell specimens, inspect their organelles, and compare how cellular structures support different biological roles.",
+    title: "Willkommen im Cell Explorer",
+    body: "Erkunden Sie sieben interaktive Zellpräparate, betrachten Sie ihre Organellen und vergleichen Sie, wie zelluläre Strukturen unterschiedliche biologische Aufgaben unterstützen.",
   },
   {
     Icon: Layers,
-    title: "Browse & study",
-    body: "Search the strip at the top, open the Gallery for the full grid, save favorites, and flip through Flashcards to learn names and notes.",
+    title: "Stöbern und lernen",
+    body: "Suchen Sie in der Leiste oben, öffnen Sie die Galerie für die Gesamtübersicht, speichern Sie Favoriten und lernen Sie Namen und Merkmale mit den Lernkarten.",
   },
   {
     Icon: Gamepad2,
-    title: "Test yourself",
-    body: "Play the Quiz in casual, timed, type-it or survival mode. Build streaks, earn XP, level up and unlock achievements. Come back daily for a bonus.",
+    title: "Wissen testen",
+    body: "Spielen Sie das Quiz im entspannten Modus, auf Zeit, im Eintipp- oder im Überlebensmodus. Sammeln Sie Serien und XP, steigen Sie auf und schalten Sie Erfolge frei. Ein täglicher Besuch bringt einen Bonus.",
   },
   {
     Icon: Keyboard,
-    title: "Pro tips",
-    body: "Press ? anytime for keyboard shortcuts (arrows switch specimens). Pick your accent colour from the avatar menu. Have fun!",
+    title: "Tipps",
+    body: "Mit ? sehen Sie jederzeit die Tastenkürzel (Pfeiltasten wechseln das Präparat). Die Akzentfarbe wählen Sie im Benutzermenü. Viel Freude!",
   },
 ];
 
@@ -39,7 +39,7 @@ export function WelcomeTour({ open, onClose }: { open: boolean; onClose: () => v
   }
 
   return (
-    <Modal open={open} onClose={finish} label="Welcome" panelClassName="welcome-modal">
+    <Modal open={open} onClose={finish} label="Willkommen" panelClassName="welcome-modal">
       <div className="welcome-art">
         <Icon size={40} />
       </div>
@@ -55,20 +55,20 @@ export function WelcomeTour({ open, onClose }: { open: boolean; onClose: () => v
       <div className="welcome-actions">
         {step > 0 ? (
           <button type="button" className="quiz-secondary" onClick={() => setStep((s) => s - 1)}>
-            Back
+            Zurück
           </button>
         ) : (
           <button type="button" className="quiz-secondary" onClick={finish}>
-            Skip
+            Überspringen
           </button>
         )}
         {isLast ? (
           <button type="button" className="quiz-primary" onClick={finish}>
-            Start exploring
+            Loslegen
           </button>
         ) : (
           <button type="button" className="quiz-primary" onClick={() => setStep((s) => s + 1)}>
-            Next
+            Weiter
           </button>
         )}
       </div>

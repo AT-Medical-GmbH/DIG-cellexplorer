@@ -10,8 +10,8 @@ import {
 import { Modal } from "./Modal";
 
 const DECK_BASE = cells.filter((c) => c.renderImage);
-const CATEGORY_FILTERS: ("All" | CellCategory)[] = [
-  "All",
+const CATEGORY_FILTERS: ("Alle" | CellCategory)[] = [
+  "Alle",
   ...CELL_CATEGORY_ORDER.filter((category) =>
     DECK_BASE.some((cell) => categorize(cell) === category),
   ),
@@ -22,12 +22,13 @@ const CATEGORY_FILTERS: ("All" | CellCategory)[] = [
  * of every deployment (licence review), so a missing file must not show a broken
  * image. Keyed by card in the parent so the state resets per card.
  */
-function FlashcardImage({ src }: { src: string }) {
+function FlashcardImage({ src, hint }: { src: string; hint: string }) {
   const [broken, setBroken] = useState(false);
   if (broken) {
     return (
-      <span className="flashcard-img-missing" aria-hidden="true">
-        Reference image not available
+      <span className="flashcard-img-missing">
+        <small>Kein Referenzbild verfügbar</small>
+        <strong>Hinweis: {hint}</strong>
       </span>
     );
   }
@@ -52,14 +53,14 @@ export function FlashcardsModal({
   onClose: () => void;
   onStudySpecimen: (id: string) => void;
 }) {
-  const [category, setCategory] = useState<"All" | CellCategory>("All");
+  const [category, setCategory] = useState<"Alle" | CellCategory>("Alle");
   const [seed, setSeed] = useState(0);
   const [index, setIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
 
   const deck = useMemo(() => {
     void seed;
-    const pool = category === "All" ? DECK_BASE : DECK_BASE.filter((c) => categorize(c) === category);
+    const pool = category === "Alle" ? DECK_BASE : DECK_BASE.filter((c) => categorize(c) === category);
     return shuffle(pool.length > 0 ? pool : DECK_BASE);
   }, [category, seed]);
 
@@ -78,16 +79,16 @@ export function FlashcardsModal({
   }
 
   return (
-    <Modal open={open} onClose={onClose} label="Flashcards" panelClassName="browser-modal flashcards-modal">
+    <Modal open={open} onClose={onClose} label="Lernkarten" panelClassName="browser-modal flashcards-modal">
         <div className="browser-head">
           <div>
             <h3>
-              <BookOpen size={20} /> Flashcards
+              <BookOpen size={20} /> Lernkarten
             </h3>
-            <p>Tap the card to reveal the answer · {index + 1} / {deck.length}</p>
+            <p>Karte antippen, um die Antwort zu sehen · {index + 1} / {deck.length}</p>
           </div>
           <button type="button" className="quiz-secondary" onClick={reshuffle}>
-            <Shuffle size={15} /> Shuffle
+            <Shuffle size={15} /> Mischen
           </button>
         </div>
 
@@ -113,34 +114,38 @@ export function FlashcardsModal({
             type="button"
             className={`flashcard ${flipped ? "is-flipped" : ""}`}
             onClick={() => setFlipped((f) => !f)}
-            aria-label={flipped ? "Show image" : "Reveal answer"}
+            aria-label={flipped ? "Vorderseite zeigen" : "Antwort aufdecken"}
           >
             <span className="flashcard-inner">
               <span className="flashcard-face flashcard-front">
-                <FlashcardImage key={card.id} src={card.renderImage!.url} />
+                <FlashcardImage
+                  key={card.id}
+                  src={card.renderImage!.url}
+                  hint={`${card.occurrence.title} · ${card.type}`}
+                />
                 <span className="flashcard-hint">
-                  <RotateCw size={14} /> What specimen is this?
+                  <RotateCw size={14} /> Welches Präparat ist das?
                 </span>
               </span>
               <span className="flashcard-face flashcard-back">
                 <strong>{card.name}</strong>
                 <em>{card.type}</em>
                 {organelle && <p className="flashcard-note">{organelle.note}</p>}
-                <span className="flashcard-where">Occurs in: {card.occurrence.title}</span>
+                <span className="flashcard-where">Vorkommen: {card.occurrence.title}</span>
               </span>
             </span>
           </button>
         )}
 
         <div className="fc-controls">
-          <button type="button" className="quiz-secondary" onClick={() => go(-1)} aria-label="Previous">
-            <ArrowLeft size={16} /> Prev
+          <button type="button" className="quiz-secondary" onClick={() => go(-1)} aria-label="Zurück">
+            <ArrowLeft size={16} /> Zurück
           </button>
           <button type="button" className="quiz-primary" onClick={() => setFlipped((f) => !f)}>
-            {flipped ? "Show image" : "Flip card"}
+            {flipped ? "Vorderseite" : "Karte umdrehen"}
           </button>
-          <button type="button" className="quiz-secondary" onClick={() => go(1)} aria-label="Next">
-            Next <ArrowRight size={16} />
+          <button type="button" className="quiz-secondary" onClick={() => go(1)} aria-label="Weiter">
+            Weiter <ArrowRight size={16} />
           </button>
         </div>
 
@@ -153,7 +158,7 @@ export function FlashcardsModal({
               onClose();
             }}
           >
-            Open {card.name} in the studio →
+            {card.name} in der Ansicht öffnen →
           </button>
         )}
     </Modal>

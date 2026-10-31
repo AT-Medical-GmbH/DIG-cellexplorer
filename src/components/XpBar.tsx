@@ -15,10 +15,10 @@ export function XpBar({ progress, pulse }: { progress: Progress; pulse: number }
   }, [pulse]);
 
   return (
-    <div className={`xp-bar ${bumped ? "is-bumped" : ""}`} title={`${progress.xp} XP total`}>
+    <div className={`xp-bar ${bumped ? "is-bumped" : ""}`} title={`${progress.xp} XP gesamt`}>
       <span className="xp-level">
         <Sparkles size={13} />
-        Lv {level}
+        Stufe {level}
       </span>
       <span className="xp-track">
         <span className="xp-fill" style={{ width: `${pct}%` }} />

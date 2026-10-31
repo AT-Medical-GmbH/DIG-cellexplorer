@@ -9,33 +9,33 @@ const creditedModels = cells.filter(
 
 export function AboutModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   return (
-    <Modal open={open} onClose={onClose} label="About this app" panelClassName="about-modal">
+    <Modal open={open} onClose={onClose} label="Über diese Anwendung" panelClassName="about-modal">
       <div className="about-head">
         <span className="brand-orb" aria-hidden="true">
           <Sparkles size={24} />
         </span>
         <div>
           <h3>Cell Explorer</h3>
-          <p>Explore life at the microscopic level in interactive 3D.</p>
+          <p>Das Leben auf mikroskopischer Ebene in interaktivem 3D erkunden.</p>
         </div>
       </div>
 
       <dl className="about-list">
         <div>
-          <dt>Specimens</dt>
+          <dt>Präparate</dt>
           <dd>
-            {cells.length} interactive 3D models across cells, organs, bones, viruses,
-            macromolecules and botanical specimens.
+            {cells.length} interaktive 3D-Präparate: Pflanzen-, Tier- und Bakterienzelle, weiße Blutzelle,
+            Neuron, Epithel- und Muskelzelle.
           </dd>
         </div>
         <div>
-          <dt>3D models</dt>
+          <dt>3D-Modelle</dt>
           <dd>
-            Sourced from the{" "}
+            Bezogen von{" "}
             <a href="https://3d.nih.gov" target="_blank" rel="noopener noreferrer">
               NIH 3D Print Exchange
             </a>
-            . Licences differ per entry:
+            . Die Lizenzen unterscheiden sich je Eintrag:
             <ul className="about-credits">
               {creditedModels.map((cell) => {
                 const asset = cell.modelAsset!;
@@ -44,7 +44,7 @@ export function AboutModal({ open, onClose }: { open: boolean; onClose: () => vo
                     <a href={asset.sourceUrl} target="_blank" rel="noopener noreferrer">
                       {cell.name}
                     </a>
-                    {asset.author ? ` by ${asset.author}` : ""}
+                    {asset.author ? ` von ${asset.author}` : ""}
                     {asset.licence ? (
                       <>
                         {" — "}
@@ -61,28 +61,28 @@ export function AboutModal({ open, onClose }: { open: boolean; onClose: () => vo
                 );
               })}
             </ul>
-            Specimens without a listed model use procedural geometry.
+            Präparate ohne aufgeführtes Modell werden vereinfacht dargestellt.
           </dd>
         </div>
         <div>
-          <dt>Rendering</dt>
+          <dt>Darstellung</dt>
           <dd>
-            React + Three.js (React Three Fiber) with an HDR studio environment, ACES tone
-            mapping, and meshopt-compressed assets.
+            React + Three.js (React Three Fiber) mit HDR-Studiobeleuchtung, ACES-Tonemapping
+            und meshopt-komprimierten Daten.
           </dd>
         </div>
         <div>
           <dt>Quiz</dt>
           <dd>
-            Identify specimens across casual, timed, type-it and survival modes; scores and
-            history are saved locally in your browser.
+            Präparate erkennen im entspannten Modus, auf Zeit, per Eintippen oder im Überlebensmodus.
+            Ergebnisse und Verlauf werden nur lokal in Ihrem Browser gespeichert.
           </dd>
         </div>
       </dl>
 
       <p className="about-foot">
-        Educational project by AT Medical GmbH. Not for diagnosis, therapy or clinical decisions.
-        Based on{" "}
+        Lernangebot der AT Medical GmbH. Nicht für Diagnostik, Therapie oder klinische Entscheidungen.
+        Basiert auf{" "}
         <a
           href="https://github.com/cclank/cell-architecture-studio"
           target="_blank"
@@ -90,7 +90,7 @@ export function AboutModal({ open, onClose }: { open: boolean; onClose: () => vo
         >
           Cell Architecture Studio
         </a>{" "}
-        by cclank (MIT licence).
+        von cclank (MIT-Lizenz).
       </p>
     </Modal>
   );

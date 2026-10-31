@@ -6,8 +6,8 @@ import { CellScene } from "./CellScene";
 type ModeOption = { id: ViewMode; label: string; Icon: LucideIcon };
 
 const modeOptions: ModeOption[] = [
-  { id: "mesh", label: "Mesh", Icon: Box },
-  { id: "focus", label: "Focus", Icon: CircleDot },
+  { id: "mesh", label: "Netz", Icon: Box },
+  { id: "focus", label: "Fokus", Icon: CircleDot },
 ];
 
 type StageProps = {
@@ -47,7 +47,7 @@ export function Stage({
           </div>
 
           <div className="view-card">
-            <span>View Mode</span>
+            <span>Ansichtsmodus</span>
             <div className="mode-switcher">
               {modeOptions.map(({ id, label, Icon }) => (
                 <button
@@ -56,10 +56,10 @@ export function Stage({
                   className={viewMode === id ? "is-active" : ""}
                   onClick={() => {
                     if (viewMode === id) {
-                      onToast(`${label} view already active.`);
+                      onToast(`Ansicht „${label}“ ist bereits aktiv.`);
                     } else {
                       onModeChange(id);
-                      onToast(`${label} view enabled.`);
+                      onToast(`Ansicht „${label}“ aktiviert.`);
                     }
                   }}
                   title={label}
@@ -69,13 +69,13 @@ export function Stage({
               ))}
             </div>
             <label className="toggle-line">
-              <span>Cross Section</span>
+              <span>Querschnitt</span>
               <input
                 type="checkbox"
                 checked={crossSection}
                 onChange={(event) => {
                   onCrossSectionChange(event.target.checked);
-                  onToast(event.target.checked ? "Cross section enabled." : "Cross section disabled.");
+                  onToast(event.target.checked ? "Querschnitt eingeschaltet." : "Querschnitt ausgeschaltet.");
                 }}
               />
               <i />
@@ -101,11 +101,11 @@ export function Stage({
             onClick={() => {
               const next = !autoRotate;
               onAutoRotateChange(next);
-              onToast(next ? "Auto-rotate on." : "Auto-rotate off.");
+              onToast(next ? "Automatische Drehung an." : "Automatische Drehung aus.");
             }}
           >
             <RotateCcw size={20} />
-            Rotate
+            Drehen
           </button>
           <button
             type="button"
@@ -114,32 +114,32 @@ export function Stage({
               onModeChange("focus");
               onToast(
                 viewMode === "focus"
-                  ? `Isolating ${cell.name} again.`
-                  : `Isolated ${cell.name} — Focus view.`,
+                  ? `${cell.name} wird erneut isoliert.`
+                  : `${cell.name} isoliert – Fokusansicht.`,
               );
             }}
           >
             <CircleDot size={20} />
-            Isolate
+            Isolieren
           </button>
           <button
             type="button"
             className={viewMode === "focus" ? "is-active" : ""}
             onClick={() => {
               onModeChange("focus");
-              onToast("Hide others — switched to Focus view.");
+              onToast("Andere ausgeblendet – Fokusansicht aktiv.");
             }}
           >
             <EyeOff size={20} />
-            Hide Others
+            Ausblenden
           </button>
           <button type="button" onClick={onReset}>
             <RotateCcw size={20} />
-            Reset View
+            Zurücksetzen
           </button>
           <button type="button" onClick={() => toggleFullscreen(onToast)}>
             <Maximize size={20} />
-            Fullscreen
+            Vollbild
           </button>
         </div>
 
@@ -150,7 +150,7 @@ export function Stage({
           </button>
           <button type="button" onClick={() => exportGlb(cell, onToast)}>
             <Box size={20} />
-            GLB Export
+            GLB-Export
           </button>
         </div>
       </section>

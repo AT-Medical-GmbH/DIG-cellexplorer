@@ -183,5 +183,8 @@ Since 2026-10-31 the UI follows the AT Medical website CI (dark glass design):
 - The 3D stage background is `#151827` (`CellScene.tsx`).
 - Header logo and `favicon.svg` are the AT Medical monogram (company trademark,
   see `THIRD_PARTY_NOTICES.md` §4).
-- The UI text is still English; a German version needs a translation pass and the
-  medical-content review (issue #5).
+- UI text, specimen content (`src/data/cells.ts`), quiz and achievements are German
+  (formal "Sie"). The translation was done without a subject-matter review; the
+  medical-didactic review (issue #5) is still required before the content is promoted
+  as a learning offer. The quiz "type it" mode accepts alternative names (`aliases`)
+  and tolerates ß/ss and umlaut variants.

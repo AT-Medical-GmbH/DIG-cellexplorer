@@ -15,10 +15,10 @@ export function DailyChallenge({ cell, streak, claimed, onStudy }: DailyChalleng
       <div className="panel-heading">
         <span>
           <CalendarDays size={16} />
-          Daily Specimen
+          Tagespräparat
         </span>
         {streak > 0 && (
-          <span className="daily-streak" title={`${streak}-day streak`}>
+          <span className="daily-streak" title={`${streak} Tage in Folge`}>
             <Flame size={14} />
             {streak}
           </span>
@@ -34,7 +34,7 @@ export function DailyChallenge({ cell, streak, claimed, onStudy }: DailyChalleng
       </button>
 
       <button type="button" className="daily-cta" onClick={onStudy} disabled={claimed}>
-        {claimed ? "Bonus claimed today" : "Study it · +15 XP"}
+        {claimed ? "Bonus heute abgeholt" : "Jetzt lernen · +15 XP"}
       </button>
     </section>
   );

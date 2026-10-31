@@ -15,7 +15,14 @@ const TIMEOUT_SENTINEL = "__timeout__";
 const QUIZ_POOL = cells.filter((c) => c.renderImage);
 
 type QuizMode = "casual" | "timed" | "type" | "survival";
-type CategoryFilter = "All" | CellCategory;
+type CategoryFilter = "Alle" | CellCategory;
+
+const MODE_LABELS: Record<QuizMode, string> = {
+  casual: "Entspannt",
+  timed: "Auf Zeit",
+  type: "Eintippen",
+  survival: "Überleben",
+};
 type Phase = "config" | "playing" | "finished";
 
 type Question = {
@@ -24,7 +31,7 @@ type Question = {
 };
 
 const CATEGORY_FILTERS: CategoryFilter[] = [
-  "All",
+  "Alle",
   ...CELL_CATEGORY_ORDER.filter((category) =>
     QUIZ_POOL.some((cell) => categorize(cell) === category),
   ),
@@ -42,6 +49,7 @@ function shuffle<T>(arr: T[]): T[] {
 function normalizeName(value: string): string {
   return value
     .toLowerCase()
+    .replace(/ß/g, "ss")
     .normalize("NFD")
     .replace(/[̀-ͯ]/g, "")
     .replace(/[^a-z0-9]+/g, " ")
@@ -67,17 +75,19 @@ function levenshtein(a: string, b: string): number {
 }
 
 // Accept exact normalized match, or a near-miss typo for longer names.
-function nameMatches(typed: string, target: string): boolean {
+function nameMatches(typed: string, target: CellItem): boolean {
   const a = normalizeName(typed);
-  const b = normalizeName(target);
   if (!a) return false;
-  if (a === b) return true;
-  const tolerance = b.length >= 8 ? 2 : b.length >= 5 ? 1 : 0;
-  return levenshtein(a, b) <= tolerance;
+  return [target.name, ...(target.aliases ?? [])].some((candidate) => {
+    const b = normalizeName(candidate);
+    if (a === b) return true;
+    const tolerance = b.length >= 8 ? 2 : b.length >= 5 ? 1 : 0;
+    return levenshtein(a, b) <= tolerance;
+  });
 }
 
 function poolForCategory(category: CategoryFilter): CellItem[] {
-  if (category === "All") return QUIZ_POOL;
+  if (category === "Alle") return QUIZ_POOL;
   const filtered = QUIZ_POOL.filter((c) => categorize(c) === category);
   return filtered.length >= 4 ? filtered : QUIZ_POOL;
 }
@@ -170,12 +180,12 @@ function writeMuted(value: boolean): void {
 function relativeTime(ts: number): string {
   const diff = Date.now() - ts;
   const mins = Math.round(diff / 60000);
-  if (mins < 1) return "just now";
-  if (mins < 60) return `${mins}m ago`;
+  if (mins < 1) return "gerade eben";
+  if (mins < 60) return `vor ${mins} Min.`;
   const hrs = Math.round(mins / 60);
-  if (hrs < 24) return `${hrs}h ago`;
+  if (hrs < 24) return `vor ${hrs} Std.`;
   const days = Math.round(hrs / 24);
-  return `${days}d ago`;
+  return `vor ${days} Tg.`;
 }
 
 export function SpecimenQuiz({
@@ -190,7 +200,7 @@ export function SpecimenQuiz({
   onComplete?: (score: number, total: number, bestStreak: number, perfect: boolean) => void;
 }) {
   const [phase, setPhase] = useState<Phase>("config");
-  const [category, setCategory] = useState<CategoryFilter>("All");
+  const [category, setCategory] = useState<CategoryFilter>("Alle");
   const [mode, setMode] = useState<QuizMode>("casual");
 
   const [question, setQuestion] = useState<Question | null>(null);
@@ -209,7 +219,7 @@ export function SpecimenQuiz({
   const [history, setHistory] = useState<QuizResult[]>(() => readHistory());
   const [misses, setMisses] = useState<CellItem[]>([]);
   const [roundLog, setRoundLog] = useState<boolean[]>([]);
-  const [shareLabel, setShareLabel] = useState("Share result");
+  const [shareLabel, setShareLabel] = useState("Ergebnis teilen");
   const [lives, setLives] = useState(SURVIVAL_LIVES);
 
   const answered = selected !== null;
@@ -231,23 +241,23 @@ export function SpecimenQuiz({
     setTypedWasRight(false);
     setMisses([]);
     setRoundLog([]);
-    setShareLabel("Share result");
+    setShareLabel("Ergebnis teilen");
     setLives(SURVIVAL_LIVES);
     setPhase("playing");
   }, [category]);
 
   const shareResult = useCallback(() => {
     const squares = roundLog.map((ok) => (ok ? "🟩" : "🟥")).join("");
-    const label = category === "All" ? "all specimens" : category;
-    const text = `Cell Architecture Quiz — ${score}/${TOTAL_QUESTIONS} (${label}, ${mode})\n${squares}`;
+    const label = category === "Alle" ? "alle Präparate" : category;
+    const text = `Cell Explorer Quiz – ${score}/${TOTAL_QUESTIONS} (${label}, ${MODE_LABELS[mode]})\n${squares}`;
     const done = () => {
-      setShareLabel("Copied!");
-      window.setTimeout(() => setShareLabel("Share result"), 1800);
+      setShareLabel("Kopiert!");
+      window.setTimeout(() => setShareLabel("Ergebnis teilen"), 1800);
     };
     if (navigator.clipboard?.writeText) {
-      navigator.clipboard.writeText(text).then(done).catch(() => setShareLabel("Copy failed"));
+      navigator.clipboard.writeText(text).then(done).catch(() => setShareLabel("Kopieren fehlgeschlagen"));
     } else {
-      setShareLabel("Copy failed");
+      setShareLabel("Kopieren fehlgeschlagen");
     }
   }, [roundLog, score, category, mode]);
 
@@ -282,7 +292,7 @@ export function SpecimenQuiz({
 
   const submitTyped = useCallback(() => {
     if (answered || !question) return;
-    const right = nameMatches(typed, question.target.name);
+    const right = nameMatches(typed, question.target);
     setTypedWasRight(right);
     setSelected(right ? question.target.id : TIMEOUT_SENTINEL);
     registerResult(right);
@@ -374,14 +384,14 @@ export function SpecimenQuiz({
     return (
       <div className="quiz-layer" style={shellStyle}>
         <div className="quiz-config">
-          <button type="button" className="quiz-exit quiz-config-close" onClick={onExit} aria-label="Close">
+          <button type="button" className="quiz-exit quiz-config-close" onClick={onExit} aria-label="Schließen">
             <X size={20} />
           </button>
-          <h2>Specimen Quiz</h2>
-          <p className="quiz-config-sub">Identify the 3D model from 4 options.</p>
+          <h2>Präparate-Quiz</h2>
+          <p className="quiz-config-sub">Erkennen Sie das 3D-Modell unter vier Antwortmöglichkeiten.</p>
 
           <div className="quiz-config-group">
-            <span className="quiz-config-label">Category</span>
+            <span className="quiz-config-label">Kategorie</span>
             <div className="quiz-chip-row">
               {CATEGORY_FILTERS.map((c) => (
                 <button
@@ -397,44 +407,44 @@ export function SpecimenQuiz({
           </div>
 
           <div className="quiz-config-group">
-            <span className="quiz-config-label">Mode</span>
+            <span className="quiz-config-label">Modus</span>
             <div className="quiz-chip-row">
               <button
                 type="button"
                 className={`quiz-chip ${mode === "casual" ? "is-active" : ""}`}
                 onClick={() => setMode("casual")}
               >
-                Casual
+                Entspannt
               </button>
               <button
                 type="button"
                 className={`quiz-chip ${mode === "timed" ? "is-active" : ""}`}
                 onClick={() => setMode("timed")}
               >
-                <Clock size={14} /> Timed ({TIMED_SECONDS}s)
+                <Clock size={14} /> Auf Zeit ({TIMED_SECONDS} s)
               </button>
               <button
                 type="button"
                 className={`quiz-chip ${mode === "type" ? "is-active" : ""}`}
                 onClick={() => setMode("type")}
               >
-                <Keyboard size={14} /> Type it
+                <Keyboard size={14} /> Eintippen
               </button>
               <button
                 type="button"
                 className={`quiz-chip ${mode === "survival" ? "is-active" : ""}`}
                 onClick={() => setMode("survival")}
               >
-                <Heart size={14} /> Survival
+                <Heart size={14} /> Überleben
               </button>
             </div>
           </div>
 
           <div className="quiz-config-meta">
             <p className="quiz-config-best">
-              <Trophy size={15} /> Best:{" "}
+              <Trophy size={15} /> Bestwert:{" "}
               {mode === "survival"
-                ? `${readBest(category, mode)} correct`
+                ? `${readBest(category, mode)} richtig`
                 : `${readBest(category, mode)} / ${TOTAL_QUESTIONS}`}
             </p>
             <button
@@ -448,13 +458,13 @@ export function SpecimenQuiz({
               aria-pressed={muted}
             >
               {muted ? <VolumeX size={15} /> : <Volume2 size={15} />}
-              {muted ? "Sound off" : "Sound on"}
+              {muted ? "Ton aus" : "Ton an"}
             </button>
           </div>
 
           {history.length > 0 && (
             <div className="quiz-config-group">
-              <span className="quiz-config-label">Recent games</span>
+              <span className="quiz-config-label">Letzte Runden</span>
               <ul className="quiz-history">
                 {history.slice(0, 5).map((h) => (
                   <li key={h.ts} className="quiz-history-row">
@@ -462,7 +472,7 @@ export function SpecimenQuiz({
                       {h.score}/{h.total}
                     </span>
                     <span className="quiz-history-meta">
-                      {h.category} · {h.mode}
+                      {h.category} · {MODE_LABELS[h.mode]}
                     </span>
                     <span className="quiz-history-time">{relativeTime(h.ts)}</span>
                   </li>
@@ -473,13 +483,13 @@ export function SpecimenQuiz({
 
           <div className="quiz-result-actions">
             <button type="button" className="quiz-primary" onClick={startGame}>
-              Start quiz
+              Quiz starten
             </button>
             <button type="button" className="quiz-secondary" onClick={onExit}>
-              Cancel
+              Abbrechen
             </button>
           </div>
-          <p className="quiz-config-hint">Tip: press 1-4 to answer, Enter for next.</p>
+          <p className="quiz-config-hint">Tipp: Mit den Tasten 1–4 antworten, mit Enter weiter.</p>
         </div>
       </div>
     );
@@ -490,32 +500,32 @@ export function SpecimenQuiz({
     const pct = Math.round((score / TOTAL_QUESTIONS) * 100);
     const verdict = survival
       ? score >= 15
-        ? "Unstoppable!"
+        ? "Unaufhaltsam!"
         : score >= 7
-          ? "Great run!"
-          : "Keep training!"
+          ? "Starke Runde!"
+          : "Weiter üben!"
       : pct >= 90
-        ? "Cell biology master!"
+        ? "Zellbiologie-Profi!"
         : pct >= 60
-          ? "Solid knowledge."
-          : "Keep exploring!";
+          ? "Solides Wissen."
+          : "Weiter erkunden!";
     return (
       <div className="quiz-layer" style={shellStyle}>
         <div className="quiz-result">
           <Trophy size={56} />
-          <h2>{survival ? "Run over" : "Quiz complete"}</h2>
+          <h2>{survival ? "Runde vorbei" : "Quiz beendet"}</h2>
           <p className="quiz-result-score">
-            {survival ? `${score} correct` : `${score} / ${TOTAL_QUESTIONS}`}
+            {survival ? `${score} richtig` : `${score} / ${TOTAL_QUESTIONS}`}
           </p>
           <p className="quiz-result-verdict">{verdict}</p>
-          {newRecord && <p className="quiz-result-record">New best score!</p>}
+          {newRecord && <p className="quiz-result-record">Neuer Bestwert!</p>}
           <p className="quiz-result-streak">
-            Best streak: {bestStreak} · {category} · {mode}
+            Längste Serie: {bestStreak} · {category} · {MODE_LABELS[mode]}
           </p>
 
           {misses.length > 0 && (
             <div className="quiz-review">
-              <span className="quiz-review-title">Review — you missed {misses.length}</span>
+              <span className="quiz-review-title">Wiederholen – {misses.length} verpasst</span>
               <div className="quiz-review-grid">
                 {misses.map((cell) => (
                   <button
@@ -524,7 +534,7 @@ export function SpecimenQuiz({
                     className="quiz-review-item"
                     onClick={() => onStudySpecimen?.(cell.id)}
                     disabled={!onStudySpecimen}
-                    title={onStudySpecimen ? `Open ${cell.name} in studio` : cell.name}
+                    title={onStudySpecimen ? `${cell.name} in der Ansicht öffnen` : cell.name}
                   >
                     <span
                       className="quiz-review-thumb"
@@ -540,14 +550,14 @@ export function SpecimenQuiz({
           <div className="quiz-result-actions">
             <button type="button" className="quiz-primary" onClick={() => setPhase("config")}>
               <RotateCcw size={18} />
-              Play again
+              Noch einmal
             </button>
             <button type="button" className="quiz-secondary" onClick={shareResult}>
               <Share2 size={16} />
               {shareLabel}
             </button>
             <button type="button" className="quiz-secondary" onClick={onExit}>
-              Back to studio
+              Zurück zur Ansicht
             </button>
           </div>
         </div>
@@ -566,8 +576,8 @@ export function SpecimenQuiz({
         <header className="quiz-header">
           {mode === "survival" ? (
             <div className="quiz-progress">
-              <span className="quiz-progress-label">Survival · Q{questionNumber}</span>
-              <div className="quiz-lives" aria-label={`${lives} lives left`}>
+              <span className="quiz-progress-label">Überleben · Frage {questionNumber}</span>
+              <div className="quiz-lives" aria-label={`${lives} Leben übrig`}>
                 {Array.from({ length: SURVIVAL_LIVES }).map((_, i) => (
                   <Heart key={i} size={18} fill={i < lives ? "currentColor" : "none"} className={i < lives ? "is-alive" : "is-lost"} />
                 ))}
@@ -576,7 +586,7 @@ export function SpecimenQuiz({
           ) : (
             <div className="quiz-progress">
               <span className="quiz-progress-label">
-                Question {questionNumber} / {TOTAL_QUESTIONS}
+                Frage {questionNumber} / {TOTAL_QUESTIONS}
               </span>
               <div className="quiz-progress-bar">
                 <i style={{ width: `${(questionNumber / TOTAL_QUESTIONS) * 100}%` }} />
@@ -592,7 +602,7 @@ export function SpecimenQuiz({
               <Zap size={16} />
               {streak}
             </span>
-            <button type="button" className="quiz-exit" onClick={onExit} aria-label="Exit quiz">
+            <button type="button" className="quiz-exit" onClick={onExit} aria-label="Quiz beenden">
               <X size={20} />
             </button>
           </div>
@@ -618,7 +628,7 @@ export function SpecimenQuiz({
             autoRotate
             resetKey={resetKey}
           />
-          <span className="quiz-stage-hint">What specimen is this?</span>
+          <span className="quiz-stage-hint">Welches Präparat ist das?</span>
         </div>
 
         {mode === "type" ? (
@@ -635,8 +645,8 @@ export function SpecimenQuiz({
               className="quiz-type-input"
               value={answered ? question.target.name : typed}
               onChange={(e) => setTyped(e.target.value)}
-              placeholder="Type the specimen name…"
-              aria-label="Specimen name"
+              placeholder="Name des Präparats eingeben …"
+              aria-label="Name des Präparats"
               disabled={answered}
               autoFocus
               autoComplete="off"
@@ -644,7 +654,7 @@ export function SpecimenQuiz({
             />
             {!answered && (
               <button type="submit" className="quiz-primary" disabled={!typed.trim()}>
-                Submit
+                Prüfen
               </button>
             )}
           </form>
@@ -682,19 +692,19 @@ export function SpecimenQuiz({
             <div className="quiz-feedback">
               <span className={isCorrect ? "quiz-feedback-ok" : "quiz-feedback-no"}>
                 {isCorrect
-                  ? "Correct!"
+                  ? "Richtig!"
                   : mode === "timed" && selected === TIMEOUT_SENTINEL
-                    ? `Time's up — it was ${question.target.name}.`
-                    : `It was ${question.target.name}.`}
+                    ? `Zeit abgelaufen – es war ${question.target.name}.`
+                    : `Es war ${question.target.name}.`}
               </span>
               <button type="button" className="quiz-primary" onClick={handleNext}>
                 {(mode === "survival" ? lives <= 0 : questionNumber >= TOTAL_QUESTIONS)
-                  ? "See results"
-                  : "Next"}
+                  ? "Ergebnis ansehen"
+                  : "Weiter"}
               </button>
             </div>
           ) : (
-            <span className="quiz-footer-hint">{question.target.type}</span>
+            <span className="quiz-footer-hint">Tasten 1–4 zum Antworten</span>
           )}
         </footer>
       </div>

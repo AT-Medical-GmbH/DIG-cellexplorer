@@ -2,28 +2,28 @@ import { Keyboard } from "lucide-react";
 import { Modal } from "./Modal";
 
 const SHORTCUTS: { keys: string[]; label: string }[] = [
-  { keys: ["←", "→"], label: "Previous / next specimen" },
-  { keys: ["F"], label: "Toggle favorite" },
-  { keys: ["R"], label: "Reset the 3D view" },
-  { keys: ["Space"], label: "Toggle auto-rotate" },
-  { keys: ["S"], label: "Surprise — random specimen" },
-  { keys: ["G"], label: "Open Gallery" },
-  { keys: ["L"], label: "Open Library" },
-  { keys: ["C"], label: "Open Flashcards" },
-  { keys: ["Q"], label: "Start a Quiz" },
-  { keys: ["?"], label: "Show this help" },
-  { keys: ["Esc"], label: "Close any panel" },
+  { keys: ["←", "→"], label: "Vorheriges / nächstes Präparat" },
+  { keys: ["F"], label: "Favorit umschalten" },
+  { keys: ["R"], label: "3D-Ansicht zurücksetzen" },
+  { keys: ["Leertaste"], label: "Automatische Drehung umschalten" },
+  { keys: ["S"], label: "Überraschung – zufälliges Präparat" },
+  { keys: ["G"], label: "Galerie öffnen" },
+  { keys: ["L"], label: "Bibliothek öffnen" },
+  { keys: ["C"], label: "Lernkarten öffnen" },
+  { keys: ["Q"], label: "Quiz starten" },
+  { keys: ["?"], label: "Diese Hilfe anzeigen" },
+  { keys: ["Esc"], label: "Jedes Fenster schließen" },
 ];
 
 export function ShortcutsHelp({ open, onClose }: { open: boolean; onClose: () => void }) {
   return (
-    <Modal open={open} onClose={onClose} label="Keyboard shortcuts" panelClassName="browser-modal shortcuts-modal">
+    <Modal open={open} onClose={onClose} label="Tastenkürzel" panelClassName="browser-modal shortcuts-modal">
       <div className="browser-head">
         <div>
           <h3>
             <Keyboard size={20} /> Keyboard shortcuts
           </h3>
-          <p>Work faster without leaving the keyboard.</p>
+          <p>Schneller arbeiten, ohne die Tastatur zu verlassen.</p>
         </div>
       </div>
       <ul className="shortcuts-list">

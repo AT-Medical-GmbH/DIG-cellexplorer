@@ -17,11 +17,11 @@ export function ComparisonModal({ cell, open, onClose }: ComparisonModalProps) {
     comparedCell.organelles[0];
 
   return (
-    <Modal open={open} onClose={onClose} label="Cell comparison" panelClassName="comparison-modal">
+    <Modal open={open} onClose={onClose} label="Zellvergleich" panelClassName="comparison-modal">
       <div className="comparison-modal-head">
-        <h3>Comparison View</h3>
+        <h3>Vergleichsansicht</h3>
         <p>
-          {cell.name} compared with {comparedCell.name}
+          {cell.name} im Vergleich mit {comparedCell.name}
         </p>
       </div>
       <div className="comparison-columns">
@@ -34,15 +34,15 @@ export function ComparisonModal({ cell, open, onClose }: ComparisonModalProps) {
               <p>{item.type}</p>
               <dl>
                 <div>
-                  <dt>Default focus</dt>
+                  <dt>Standardfokus</dt>
                   <dd>{organelle.name}</dd>
                 </div>
                 <div>
-                  <dt>Main note</dt>
+                  <dt>Kurzbeschreibung</dt>
                   <dd>{organelle.subtitle}</dd>
                 </div>
                 <div>
-                  <dt>Occurs in</dt>
+                  <dt>Vorkommen</dt>
                   <dd>{item.occurrence.title}</dd>
                 </div>
               </dl>

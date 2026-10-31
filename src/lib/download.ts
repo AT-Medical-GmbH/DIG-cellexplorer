@@ -3,7 +3,7 @@ import type { CellItem } from "../data/cells";
 type Notify = (message: string) => void;
 
 export function slugify(name: string): string {
-  return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  return name.toLowerCase().replace(/ß/g, "ss").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 }
 
 function triggerDownload(href: string, filename: string): void {
@@ -18,15 +18,15 @@ function triggerDownload(href: string, filename: string): void {
 export function captureScreenshot(cell: CellItem, onToast: Notify): void {
   const canvas = document.querySelector<HTMLCanvasElement>(".canvas-wrap canvas");
   if (!canvas) {
-    onToast("Stage not ready — try again.");
+    onToast("Darstellung noch nicht bereit – bitte erneut versuchen.");
     return;
   }
   try {
     const url = canvas.toDataURL("image/png");
     triggerDownload(url, `${slugify(cell.name)}.png`);
-    onToast(`Saved ${cell.name}.png`);
+    onToast(`${cell.name}.png gespeichert.`);
   } catch {
-    onToast("Screenshot failed — canvas blocked.");
+    onToast("Screenshot fehlgeschlagen – Zeichenfläche blockiert.");
   }
 }
 
@@ -35,8 +35,8 @@ export function toggleFullscreen(onToast: Notify): void {
   if (!el) return;
   if (!document.fullscreenElement) {
     el.requestFullscreen()
-      .then(() => onToast("Fullscreen — press Esc to exit."))
-      .catch(() => onToast("Fullscreen blocked by browser."));
+      .then(() => onToast("Vollbild – zum Beenden Esc drücken."))
+      .catch(() => onToast("Vollbild vom Browser blockiert."));
   } else {
     document.exitFullscreen().catch(() => {});
   }
@@ -45,10 +45,10 @@ export function toggleFullscreen(onToast: Notify): void {
 export async function exportGlb(cell: CellItem, onToast: Notify): Promise<void> {
   const url = cell.modelAsset?.url;
   if (!url) {
-    onToast(`${cell.name} has no downloadable model.`);
+    onToast(`Für „${cell.name}“ gibt es kein herunterladbares Modell.`);
     return;
   }
-  onToast(`Preparing ${cell.name} model…`);
+  onToast(`Modell „${cell.name}“ wird vorbereitet …`);
   try {
     const res = await fetch(url);
     if (!res.ok) throw new Error(String(res.status));
@@ -56,8 +56,8 @@ export async function exportGlb(cell: CellItem, onToast: Notify): Promise<void> 
     const objectUrl = URL.createObjectURL(blob);
     triggerDownload(objectUrl, `${slugify(cell.name)}.glb`);
     URL.revokeObjectURL(objectUrl);
-    onToast(`Downloaded ${cell.name}.glb`);
+    onToast(`${cell.name}.glb heruntergeladen.`);
   } catch {
-    onToast("Model download failed.");
+    onToast("Modell-Download fehlgeschlagen.");
   }
 }

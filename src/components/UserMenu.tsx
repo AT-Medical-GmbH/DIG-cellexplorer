@@ -54,15 +54,15 @@ export function UserMenu({
       <div className="user-menu-stats">
         <div>
           <strong>{exploredCount}</strong>
-          <span>of {totalCount} explored</span>
+          <span>von {totalCount} erkundet</span>
         </div>
         <div>
           <strong>{favoritesCount}</strong>
-          <span>favorites</span>
+          <span>Favoriten</span>
         </div>
       </div>
       <div className="user-menu-theme">
-        <span className="user-menu-theme-label">Accent</span>
+        <span className="user-menu-theme-label">Akzentfarbe</span>
         <div className="user-menu-swatches">
           {ACCENTS.map((a) => (
             <button
@@ -81,22 +81,22 @@ export function UserMenu({
       </div>
       <button type="button" className="user-menu-item" role="menuitem" onClick={onAchievements}>
         <Trophy size={16} />
-        Achievements
+        Erfolge
       </button>
       <button type="button" className="user-menu-item" role="menuitem" onClick={onReplayIntro}>
         <Compass size={16} />
-        Replay intro
+        Einführung wiederholen
       </button>
       <button type="button" className="user-menu-item" role="menuitem" onClick={onClearFavorites}>
         <Star size={16} />
-        Clear favorites
+        Favoriten löschen
       </button>
       <button type="button" className="user-menu-item is-danger" role="menuitem" onClick={onResetAll}>
         <Trash2 size={16} />
-        Reset all saved data
+        Alle gespeicherten Daten zurücksetzen
       </button>
       <p className="user-menu-foot">
-        <RotateCcw size={12} /> Data is stored only in this browser.
+        <RotateCcw size={12} /> Daten werden nur in diesem Browser gespeichert.
       </p>
     </div>
   );

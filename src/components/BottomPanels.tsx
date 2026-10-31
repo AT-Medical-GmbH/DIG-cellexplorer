@@ -24,15 +24,15 @@ export function BottomPanels({ cell, onCompare, onToast }: BottomPanelsProps) {
       added.push({
         id: `${Date.now()}-${file.name}`,
         url: URL.createObjectURL(file),
-        label: file.name.replace(/\.[^.]+$/, "").slice(0, 18) || "Image",
+        label: file.name.replace(/\.[^.]+$/, "").slice(0, 18) || "Bild",
       });
     }
     if (added.length === 0) {
-      onToast("Please choose an image file.");
+      onToast("Bitte eine Bilddatei auswählen.");
       return;
     }
     setUploads((prev) => [...prev, ...added]);
-    onToast(`Added ${added.length} microscope image${added.length > 1 ? "s" : ""}.`);
+    onToast(`${added.length} Mikroskopbild${added.length > 1 ? "er" : ""} hinzugefügt.`);
   }
 
   function removeUpload(id: string) {
@@ -41,7 +41,7 @@ export function BottomPanels({ cell, onCompare, onToast }: BottomPanelsProps) {
       if (target) URL.revokeObjectURL(target.url);
       return prev.filter((u) => u.id !== id);
     });
-    onToast("Removed image.");
+    onToast("Bild entfernt.");
   }
 
   return (
@@ -49,7 +49,7 @@ export function BottomPanels({ cell, onCompare, onToast }: BottomPanelsProps) {
       <div className="panel microscope-panel">
         <div className="panel-heading">
           <span>
-            Microscope View
+            Mikroskopansicht
             <Info size={16} />
           </span>
         </div>
@@ -59,8 +59,9 @@ export function BottomPanels({ cell, onCompare, onToast }: BottomPanelsProps) {
               type="button"
               key={image.label}
               className={`micro-card pattern-${image.pattern}`}
+              title={image.label}
               style={{ "--micro": image.tone } as CSSProperties}
-              onClick={() => onToast(`${image.label} selected.`)}
+              onClick={() => onToast(`${image.label} ausgewählt.`)}
             >
               <span />
               <strong>{image.label}</strong>
@@ -73,7 +74,7 @@ export function BottomPanels({ cell, onCompare, onToast }: BottomPanelsProps) {
               <button
                 type="button"
                 className="micro-card-remove"
-                aria-label={`Remove ${image.label}`}
+                aria-label={`${image.label} entfernen`}
                 onClick={() => removeUpload(image.id)}
               >
                 <X size={14} />
@@ -86,7 +87,7 @@ export function BottomPanels({ cell, onCompare, onToast }: BottomPanelsProps) {
             onClick={() => fileInputRef.current?.click()}
           >
             <Plus size={28} />
-            <strong>Add Image</strong>
+            <strong>Hinzufügen</strong>
           </button>
           <input
             ref={fileInputRef}
@@ -105,7 +106,7 @@ export function BottomPanels({ cell, onCompare, onToast }: BottomPanelsProps) {
       <div className="panel compare-panel">
         <div className="panel-heading">
           <span>
-            Compare Cells
+            Zellen vergleichen
             <Info size={16} />
           </span>
         </div>
@@ -114,7 +115,7 @@ export function BottomPanels({ cell, onCompare, onToast }: BottomPanelsProps) {
             <MiniCell cell={cell} />
             <span>
               <strong>{cell.name}</strong>
-              <em>You are here</em>
+              <em>Aktuelle Auswahl</em>
             </span>
           </div>
           <b>VS</b>
@@ -127,7 +128,7 @@ export function BottomPanels({ cell, onCompare, onToast }: BottomPanelsProps) {
           </div>
         </div>
         <button type="button" className="comparison-button" onClick={onCompare}>
-          Open Comparison View
+          Vergleichsansicht öffnen
           <ArrowRight size={20} />
         </button>
       </div>

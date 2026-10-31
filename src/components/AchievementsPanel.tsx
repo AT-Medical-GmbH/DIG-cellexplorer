@@ -39,21 +39,21 @@ export function AchievementsPanel({
   const unlockedCount = progress.unlocked.length;
 
   return (
-    <Modal open={open} onClose={onClose} label="Achievements" panelClassName="browser-modal achievements-modal">
+    <Modal open={open} onClose={onClose} label="Erfolge" panelClassName="browser-modal achievements-modal">
       <div className="browser-head">
         <div>
           <h3>
-            <Trophy size={20} /> Achievements
+            <Trophy size={20} /> Erfolge
           </h3>
           <p>
-            {unlockedCount}/{ACHIEVEMENTS.length} unlocked · {progress.xp} XP
+            {unlockedCount}/{ACHIEVEMENTS.length} freigeschaltet · {progress.xp} XP
           </p>
         </div>
       </div>
 
       <div className="ach-level">
           <span className="ach-level-badge">
-            <Sparkles size={16} /> Level {level}
+            <Sparkles size={16} /> Stufe {level}
           </span>
           <span className="ach-level-track">
             <span className="ach-level-fill" style={{ width: `${(intoLevel / forNext) * 100}%` }} />
