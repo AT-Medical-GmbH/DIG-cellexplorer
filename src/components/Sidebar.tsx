@@ -18,13 +18,13 @@ export function Sidebar({ selectedCell, activeOrganelle, onSelectOrganelle, onTo
         <div className="panel-heading">
           <span>
             <Sparkles size={16} />
-            Organellen
+            Zellbestandteile
           </span>
           <button
             type="button"
             className="panel-heading-chev"
-            onClick={() => onToast(`${selectedCell.organelles.length} Organellen verfügbar.`)}
-            aria-label="Hinweis zu Organellen"
+            onClick={() => onToast(`${selectedCell.organelles.length} Strukturen verfügbar.`)}
+            aria-label="Hinweis zu Zellbestandteilen"
           >
             <ChevronDown size={18} />
           </button>

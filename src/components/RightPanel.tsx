@@ -43,7 +43,7 @@ export function RightPanel({
     <aside className="right-rail">
       <section className="panel details-panel">
         <div className="panel-heading detail-heading">
-          <span>Organell-Details</span>
+          <span>Strukturdetails</span>
           <button
             type="button"
             onClick={() => onToggleFavorite(cell.id)}
@@ -124,8 +124,7 @@ export function RightPanel({
             Aktueller Lernfokus
           </span>
           <p>
-            Finden Sie <strong>{organelle.name}</strong>, erklären Sie die Funktion und vergleichen Sie sie mit der entsprechenden Struktur bei{" "}
-            {getCellById(cell.comparison).name}.
+            Finden Sie <strong>{organelle.name}</strong>, erklären Sie die Funktion und prüfen Sie, ob {getCellById(cell.comparison).name} eine entsprechende Struktur besitzt.
           </p>
         </div>
 

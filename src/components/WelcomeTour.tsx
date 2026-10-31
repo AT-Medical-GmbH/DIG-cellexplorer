@@ -8,7 +8,7 @@ const STEPS: Step[] = [
   {
     Icon: Sparkles,
     title: "Willkommen im Cell Explorer",
-    body: "Erkunden Sie sieben interaktive Zellpräparate, betrachten Sie ihre Organellen und vergleichen Sie, wie zelluläre Strukturen unterschiedliche biologische Aufgaben unterstützen.",
+    body: "Erkunden Sie sieben interaktive Zellpräparate, betrachten Sie ihre Zellbestandteile und vergleichen Sie, wie zelluläre Strukturen unterschiedliche biologische Aufgaben unterstützen.",
   },
   {
     Icon: Layers,

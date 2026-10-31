@@ -105,7 +105,7 @@ implements tiers A and B; tier C cannot be restored through it.
 
 | Date | Decision | By | Rationale |
 | --- | --- | --- | --- |
-| _pending_ | _ship / do not ship_ | _Andreas Tremml / legal_ | The free, login-gated area of a GmbH website is a grey zone under the NC clause: the use itself is free of charge, but the operator is a company. Default until decided: **do not ship** (tier A only). |
+| 2026-10-31 | **ship** tier B (Animal Cell, Neuron) in the login-gated area | Andreas Tremml (explicit chat decision 17:37, relayed via Atlas, order #209/#218) | Free, non-commercial, login-gated learning offer; attribution shown permanently under the stage and in *About*; unmodified models served. The grey zone (operator is a GmbH) is accepted by the decision. Revoke: rebuild with `--cc0-only`. Plant cell and white blood cell models stay out (origin unknown). |
 
 ### What the app looks like without tier B and C
 

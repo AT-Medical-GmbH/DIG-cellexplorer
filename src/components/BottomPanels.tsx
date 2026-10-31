@@ -49,7 +49,7 @@ export function BottomPanels({ cell, onCompare, onToast }: BottomPanelsProps) {
       <div className="panel microscope-panel">
         <div className="panel-heading">
           <span>
-            Mikroskopansicht
+            Mikroskopansicht (schematisch)
             <Info size={16} />
           </span>
         </div>

@@ -89,7 +89,7 @@ export const cells: CellItem[] = [
     defaultOrganelle: "nucleus",
     comparison: "animal",
     clinicalContext:
-      "Eine nützliche nicht-menschliche Vergleichsbasis, um zu zeigen, warum Zellwände und Chloroplasten in menschlichen Gewebeproben fehlen.",
+      "Nichtmenschliche Vergleichszelle: Menschliche Zellen besitzen weder Zellwand noch Chloroplasten. Findet man solche Strukturen in einer Patientenprobe, handelt es sich um Pflanzenmaterial, etwa Nahrungsreste.",
     renderImage: {
       url: assetUrl("cell-renders-transparent/plant.png"),
       aspect: "square",
@@ -122,7 +122,7 @@ export const cells: CellItem[] = [
         color: "#7047a8",
         attributes: [
           { label: "Größe", value: "5 bis 10 µm Durchmesser" },
-          { label: "Lage", value: "Meist zentral" },
+          { label: "Lage", value: "In jungen Zellen zentral, in ausgewachsenen Zellen meist wandständig" },
           { label: "Im Lichtmikroskop sichtbar", value: "Ja" },
         ],
         note:
@@ -177,7 +177,7 @@ export const cells: CellItem[] = [
     id: "whiteBlood",
     name: "Weiße Blutzelle",
     aliases: ["Leukozyt", "Weißes Blutkörperchen", "Leukozyten"],
-    type: "Immunzelle",
+    type: "Immunzelle (hier: neutrophiler Granulozyt)",
     accent: "#6d78a8",
     accentSoft: "#e6eaf7",
     color: "#b9bfd7",
@@ -217,7 +217,7 @@ export const cells: CellItem[] = [
         subtitle: "Das Reinigungsbläschen",
         color: "#8b54b7",
         attributes: [
-          { label: "Größe", value: "Etwa 1 µm" },
+          { label: "Größe", value: "Etwa 0,1 bis 1 µm" },
           { label: "Inhalt", value: "Verdauungsenzyme" },
           { label: "Funktion", value: "Abbau" },
         ],
@@ -286,7 +286,7 @@ export const cells: CellItem[] = [
       exposure: 1.05,
     },
     occurrence: {
-      title: "Gehirn, Rückenmark, Nerven",
+      title: "Gehirn, Rückenmark, Ganglien (Fortsätze in peripheren Nerven)",
       body: "Neuronen leiten elektrische und chemische Signale durch weit verzweigte Netzwerke.",
       motif: "nerve",
     },
@@ -303,11 +303,11 @@ export const cells: CellItem[] = [
         color: "#6b7dc6",
         attributes: [
           { label: "Länge", value: "µm bis über 1 Meter" },
-          { label: "Isolation", value: "Myelinscheide" },
+          { label: "Isolation", value: "Myelinscheide (nicht bei allen Axonen; marklos sind z. B. die C-Fasern)" },
           { label: "Im Lichtmikroskop sichtbar", value: "Ja, mit Färbung" },
         ],
         note:
-          "Manche Axone im menschlichen Körper reichen von der Wirbelsäule bis zum Fuß. Neuronen gehören damit zu den längsten Zellen überhaupt.",
+          "Manche Axone reichen vom unteren Rückenmark bis in den Fuß. Neuronen gehören damit zu den längsten Zellen überhaupt.",
         fact: "Ein Nervenimpuls kann sich mit über 100 Metern pro Sekunde ausbreiten.",
       },
       {
@@ -374,7 +374,7 @@ export const cells: CellItem[] = [
         subtitle: "Der Resorptionssaum",
         color: "#c86f80",
         attributes: [
-          { label: "Länge", value: "0,5 bis 1 µm" },
+          { label: "Länge", value: "etwa 1 bis 2 µm (Bürstensaum des Dünndarms)" },
           { label: "Lage", value: "Apikale Oberfläche" },
           { label: "Funktion", value: "Oberflächenvergrößerung" },
         ],
@@ -407,7 +407,7 @@ export const cells: CellItem[] = [
           { label: "Im Lichtmikroskop sichtbar", value: "Ja" },
         ],
         note:
-          "Der Zellkern der Epithelzelle speichert die Erbinformation und liegt je nach Gewebeform an unterschiedlicher Stelle.",
+          "Der Zellkern der Epithelzelle speichert die Erbinformation. Lage und Form des Kerns richten sich nach der Zellform (flach, kubisch, zylindrisch).",
         fact: "Die Kernform hilft Pathologen bei der Beurteilung von Gewebeproben.",
       },
     ],
@@ -459,13 +459,13 @@ export const cells: CellItem[] = [
         subtitle: "Das nackte Erbgut",
         color: "#7a43ad",
         attributes: [
-          { label: "Größe", value: "Bereich von etwa 1 µm" },
+          { label: "Größe", value: "Abhängig von Zellgröße und Wachstumsphase" },
           { label: "Membran", value: "Keine" },
-          { label: "Im Lichtmikroskop sichtbar", value: "Nein, nur im Elektronenmikroskop" },
+          { label: "Im Lichtmikroskop sichtbar", value: "Nicht in der üblichen Lichtmikroskopie (z. B. Gram-Färbung); mit DNA-Fluoreszenzfarbstoffen (z. B. DAPI) darstellbar" },
         ],
         note:
           "Anders als eukaryotische Zellen haben Bakterien keine Kernhülle. Ihre DNA liegt in einem Bereich des Zytoplasmas, dem Nukleoid.",
-        fact: "Im menschlichen Körper leben mehr Bakterienzellen, als viele vermuten.",
+        fact: "Im und am Körper leben ungefähr so viele Bakterien, wie der Körper eigene Zellen hat (je etwa 3–4 × 10¹³), vor allem im Dickdarm.",
       },
       {
         id: "cellWall",
@@ -484,7 +484,7 @@ export const cells: CellItem[] = [
       {
         id: "flagellum",
         name: "Geißel",
-        subtitle: "Der Schwimmschwanz",
+        subtitle: "Der rotierende Antrieb",
         color: "#b87438",
         attributes: [
           { label: "Funktion", value: "Fortbewegung" },
@@ -564,7 +564,7 @@ export const cells: CellItem[] = [
         ],
         note:
           "Der Zellkern enthält die Chromosomen und steuert, welche Gene in einer Zelle aktiv sind.",
-        fact: "Nicht alle tierischen Zellen behalten ihren Zellkern. Reife rote Blutkörperchen verlieren ihn.",
+        fact: "Reife Erythrozyten des Menschen und anderer Säugetiere sind kernlos. Kernhaltige Vorstufen (Normoblasten) im Blut eines Erwachsenen sind ein krankhafter Befund.",
       },
       {
         id: "golgi",
@@ -584,9 +584,9 @@ export const cells: CellItem[] = [
   },
   {
     id: "muscle",
-    name: "Muskelzelle",
-    aliases: ["Muskelfaser", "Myozyt"],
-    type: "Muskelfaser",
+    name: "Skelettmuskelfaser",
+    aliases: ["Muskelzelle", "Muskelfaser", "Myozyt", "Skelettmuskelzelle"],
+    type: "Skelettmuskel, vielkernig (Kerne am Rand)",
     accent: "#bd514d",
     accentSoft: "#f5dfdc",
     color: "#ca6678",
@@ -622,7 +622,7 @@ export const cells: CellItem[] = [
         ],
         note:
           "Jede Muskelfaser enthält Hunderte bis Tausende Myofibrillen, die über ihre gesamte Länge verlaufen und dicht gepackt sind.",
-        fact: "Eine einzelne Muskelfaser kann bis zu 30 cm lang werden.",
+        fact: "Skelettmuskelfasern können mehrere Zentimeter lang werden, in langen Muskeln über 10 cm.",
       },
       {
         id: "sarcolemma",
@@ -645,7 +645,7 @@ export const cells: CellItem[] = [
         color: "#cf7042",
         attributes: [
           { label: "Funktion", value: "Energieversorgung" },
-          { label: "Position", value: "Zwischen den Fasern" },
+          { label: "Position", value: "Zwischen den Myofibrillen und unter dem Sarkolemm" },
           { label: "Dichte", value: "Aktivitätsabhängig" },
         ],
         note:
