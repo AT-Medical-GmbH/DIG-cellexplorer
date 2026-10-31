@@ -84,12 +84,12 @@ export function Header({
       <nav className="top-nav" aria-label="Hauptnavigation">
         <XpBar progress={progress} pulse={xpPulse} />
         {navItems.map(({ id, label, Icon, onClick }) => (
-          <button key={id} type="button" onClick={onClick}>
+          <button key={id} type="button" onClick={onClick} aria-label={label} title={label}>
             <Icon size={24} />
             <span>{label}</span>
           </button>
         ))}
-        <button className="quiz-launch" type="button" onClick={onPlayQuiz}>
+        <button className="quiz-launch" type="button" onClick={onPlayQuiz} aria-label="Quiz" title="Quiz">
           <Gamepad2 size={22} />
           <span>Quiz</span>
         </button>

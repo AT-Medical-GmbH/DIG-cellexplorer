@@ -3795,3 +3795,214 @@ a {
   color: inherit;
   text-decoration: underline;
 }
+
+/* ===== Einbettung: Rahmenhoehe und sichtbarer Ausschnitt (src/lib/embed.ts) ===== */
+.cx-embedded body,
+.cx-embedded .app-shell {
+  min-height: 0;
+}
+
+/* Overlays folgen dem sichtbaren Ausschnitt des Rahmens, nicht der gesamten Rahmenhoehe. */
+.cx-vp-active .modal-layer,
+.cx-vp-active .quiz-layer,
+.cx-vp-active .confetti-canvas {
+  position: absolute;
+  inset: auto;
+  top: var(--vp-top, 0px);
+  left: 0;
+  right: 0;
+  width: auto;
+  height: var(--vp-h, 100vh);
+}
+
+.cx-vp-active .toast {
+  top: calc(var(--vp-top, 0px) + var(--vp-h, 100vh) - 24px);
+  bottom: auto;
+  transform: translateY(-100%);
+}
+
+.cx-vp-active .celebration {
+  top: calc(var(--vp-top, 0px) + 88px);
+}
+
+/* Dialoge scrollen in sich, wenn der sichtbare Ausschnitt kleiner ist als der Dialog. */
+.modal-layer,
+.quiz-layer {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+}
+
+.modal-layer > div,
+.quiz-layer > *,
+.quiz-panel,
+.browser-modal {
+  max-height: 100%;
+  overflow-y: auto;
+}
+
+/* ===== Titel und Kopfleiste ===== */
+@media (max-width: 1400px) {
+  .brand-block h1 {
+    font-size: 2.6rem;
+  }
+
+  .brand-block p {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 1080px) {
+  .brand-block h1 {
+    font-size: 2.4rem;
+  }
+
+  .model-credit {
+    bottom: 128px;
+  }
+}
+
+/* ===== Mobil (bis 720 px, getestet bei 390 px Seitenbreite) ===== */
+@media (max-width: 720px) {
+  html,
+  body {
+    min-width: 0;
+    overflow-x: hidden;
+  }
+
+  .app-shell {
+    padding: 10px;
+  }
+
+  .topbar {
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .brand-block h1 {
+    font-size: 1.7rem;
+  }
+
+  .brand-logo {
+    width: 40px;
+    height: 40px;
+  }
+
+  .top-nav {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 4px 6px;
+    overflow: visible;
+    padding-bottom: 0;
+  }
+
+  .top-nav .xp-bar {
+    flex: 1 0 100%;
+    justify-content: space-between;
+  }
+
+  .top-nav .xp-track {
+    flex: 1 1 auto;
+    width: auto;
+  }
+
+  .top-nav > button:not(.avatar-button) {
+    min-width: 42px;
+    padding: 4px;
+  }
+
+  .quiz-launch {
+    min-width: 42px;
+    padding: 4px;
+  }
+
+  .avatar-wrap {
+    margin-left: auto;
+  }
+
+  .user-menu {
+    right: 0;
+    left: auto;
+    max-width: calc(100vw - 40px);
+  }
+
+  .detail-hero h3 {
+    font-size: 1.5rem;
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+
+  .stage-panel {
+    min-height: 740px;
+  }
+
+  .canvas-wrap {
+    inset: 235px 10px 188px;
+  }
+
+  .model-credit {
+    left: 16px;
+    right: 16px;
+    bottom: 132px;
+  }
+
+  .modal-layer,
+  .quiz-layer {
+    padding: 10px;
+  }
+
+  .comparison-modal,
+  .about-modal,
+  .browser-modal,
+  .quiz-panel {
+    padding: 16px;
+  }
+
+  .toast {
+    right: 10px;
+    left: 10px;
+    max-width: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .specimen-strip,
+  .specimen-strip-scroll,
+  .app-grid > * {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .specimen-strip-header {
+    flex-wrap: wrap;
+    gap: 8px 10px;
+  }
+
+  .specimen-strip-search {
+    flex: 1 1 100%;
+    order: 5;
+  }
+
+  .specimen-strip-search input {
+    max-width: none;
+  }
+}
+
+@media (max-width: 720px) {
+  /* nur visuell ausblenden, der Name bleibt fuer Screenreader erhalten */
+  .stage-toolbar .tb-label,
+  .export-toolbar .tb-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .stage-toolbar button,
+  .export-toolbar button {
+    position: relative;
+    min-width: 44px;
+  }
+}

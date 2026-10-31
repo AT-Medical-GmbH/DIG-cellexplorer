@@ -122,7 +122,7 @@ export function Stage({
             }}
           >
             <RotateCcw size={20} />
-            Drehen
+            <span className="tb-label">Drehen</span>
           </button>
           <button
             type="button"
@@ -137,7 +137,7 @@ export function Stage({
             }}
           >
             <CircleDot size={20} />
-            Isolieren
+            <span className="tb-label">Isolieren</span>
           </button>
           <button
             type="button"
@@ -148,26 +148,28 @@ export function Stage({
             }}
           >
             <EyeOff size={20} />
-            Ausblenden
+            <span className="tb-label">Ausblenden</span>
           </button>
-          <button type="button" onClick={onReset}>
+          <button type="button" onClick={onReset}
+            aria-label="Zurücksetzen"
+          >
             <RotateCcw size={20} />
-            Zurücksetzen
+            <span className="tb-label">Zurücksetzen</span>
           </button>
           <button type="button" onClick={() => toggleFullscreen(onToast)}>
             <Maximize size={20} />
-            Vollbild
+            <span className="tb-label">Vollbild</span>
           </button>
         </div>
 
         <div className="export-toolbar">
           <button type="button" onClick={() => captureScreenshot(cell, onToast)}>
             <Camera size={20} />
-            Screenshot
+            <span className="tb-label">Screenshot</span>
           </button>
           <button type="button" onClick={() => exportGlb(cell, onToast)}>
             <Box size={20} />
-            GLB-Export
+            <span className="tb-label">GLB-Export</span>
           </button>
         </div>
       </section>
