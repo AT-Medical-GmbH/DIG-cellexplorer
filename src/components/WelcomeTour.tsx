@@ -7,7 +7,7 @@ type Step = { Icon: LucideIcon; title: string; body: string };
 const STEPS: Step[] = [
   {
     Icon: Sparkles,
-    title: "Welcome to Cell Architecture Studio",
+    title: "Welcome to Cell Explorer",
     body: "Explore seven interactive cell specimens, inspect their organelles, and compare how cellular structures support different biological roles.",
   },
   {

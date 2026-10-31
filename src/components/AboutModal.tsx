@@ -15,7 +15,7 @@ export function AboutModal({ open, onClose }: { open: boolean; onClose: () => vo
           <Sparkles size={24} />
         </span>
         <div>
-          <h3>Cell Architecture Studio</h3>
+          <h3>Cell Explorer</h3>
           <p>Explore life at the microscopic level in interactive 3D.</p>
         </div>
       </div>
@@ -80,7 +80,18 @@ export function AboutModal({ open, onClose }: { open: boolean; onClose: () => vo
         </div>
       </dl>
 
-      <p className="about-foot">Built as an educational project. Not for clinical use.</p>
+      <p className="about-foot">
+        Educational project by AT Medical GmbH. Not for diagnosis, therapy or clinical decisions.
+        Based on{" "}
+        <a
+          href="https://github.com/cclank/cell-architecture-studio"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Cell Architecture Studio
+        </a>{" "}
+        by cclank (MIT licence).
+      </p>
     </Modal>
   );
 }

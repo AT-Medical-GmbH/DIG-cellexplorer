@@ -7,7 +7,6 @@ import {
   Info,
   Layers,
   Library,
-  Sparkles,
   type LucideIcon,
 } from "lucide-react";
 import type { CellItem } from "../data/cells";
@@ -69,11 +68,15 @@ export function Header({
   return (
     <header className="topbar">
       <div className="brand-block">
-        <div className="brand-orb" aria-hidden="true">
-          <Sparkles size={26} />
-        </div>
+        <img
+          className="brand-logo"
+          src={`${import.meta.env.BASE_URL}favicon.svg`}
+          alt="AT Medical"
+          width={52}
+          height={52}
+        />
         <div>
-          <h1>Cell Architecture Studio</h1>
+          <h1>Cell Explorer</h1>
           <p>Explore life at the microscopic level</p>
         </div>
       </div>

@@ -2,10 +2,10 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { formatTargetHelp, hasExpectedAppIdentity } from "./verify-preflight.mjs";
 
-test("recognizes the Cell Architecture Studio page identity", () => {
+test("recognizes the Cell Explorer page identity", () => {
   assert.equal(
     hasExpectedAppIdentity({
-      title: "Cell Architecture Studio",
+      title: "Cell Explorer",
       bodyText: "Explore life at the microscopic level",
     }),
     true,

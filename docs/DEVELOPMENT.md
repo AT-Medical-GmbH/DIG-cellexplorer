@@ -165,3 +165,23 @@ Keep commits coherent and reviewable; one logical change per commit.
 | `npm run verify` cannot find a browser | Set `CHROME_PATH` to a Chrome/Chromium binary. |
 | Build fails on `tsc -b` | A TypeScript error; fix types before building. |
 | Large bundle warnings | Known (Three.js/R3F vendor chunks); addressed in Phase 1/6, not Phase 0. |
+
+---
+
+## 7. Design (AT Medical layout)
+
+Since 2026-10-31 the UI follows the AT Medical website CI (dark glass design):
+
+- The product name is **Cell Explorer** (page title, header, welcome tour, About).
+- Colours, text and surfaces come from the CSS custom properties in the `:root`
+  block of `src/styles.css` (`--ci-*` palette, `--ink*`, `--paper*`, `--accent*`);
+  the values match the website's `shared.css` (accent `#5b82c4`, `--ci-900` `#0d0f17`).
+  Change a token, not individual rules. The selectable accent colours live in
+  `src/lib/theme.ts`; the default `blue` is "AT Medical Blue".
+- Fonts are self-hosted: Inter (UI) and Source Serif (headings) in `public/fonts/`,
+  loaded from `index.html` through `%BASE_URL%fonts/fonts.css`. No external request.
+- The 3D stage background is `#151827` (`CellScene.tsx`).
+- Header logo and `favicon.svg` are the AT Medical monogram (company trademark,
+  see `THIRD_PARTY_NOTICES.md` §4).
+- The UI text is still English; a German version needs a translation pass and the
+  medical-content review (issue #5).

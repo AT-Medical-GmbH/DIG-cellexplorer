@@ -46,7 +46,7 @@ async function openVerifiedPage(browser, viewport) {
   if (!hasExpectedAppIdentity({ title, bodyText })) {
     await page.close();
     throw preflightError(
-      `APP_URL ${url} did not load Cell Architecture Studio. Received page title: "${title || "(empty)"}".`,
+      `APP_URL ${url} did not load Cell Explorer. Received page title: "${title || "(empty)"}".`,
     );
   }
 
@@ -54,7 +54,7 @@ async function openVerifiedPage(browser, viewport) {
     await page.waitForSelector(modelCanvasSelector, { timeout: 15000 });
   } catch (error) {
     await page.close();
-    throw preflightError(`Cell Architecture Studio loaded, but no canvas appeared at ${url}.`, error);
+    throw preflightError(`Cell Explorer loaded, but no canvas appeared at ${url}.`, error);
   }
 
   return page;

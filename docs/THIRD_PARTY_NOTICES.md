@@ -109,8 +109,7 @@ https://creativecommons.org/licenses/by-nc-sa/4.0/
 | `public/texture-references/gpt-image-2-…/` | AI-generated (GPT image model) teaching images | Generated-image IP/usage terms unverified |
 | `docs/media/*` | Demo GIF/MP4 of the upstream app | Shows upstream UI/branding; re-create for AT Medical |
 
-> `favicon.svg` ships with the upstream code under MIT and will be replaced by
-> AT Medical branding in a later phase.
+> The upstream `favicon.svg` has been replaced by the AT Medical monogram (see §4).
 
 ---
 
@@ -125,6 +124,9 @@ commercial use is permitted.
 | --- | --- | --- | --- | --- |
 | Draco glTF decoder (`draco_decoder.js/.wasm`, `draco_wasm_wrapper.js`) | Google Draco, copied from `three/examples/jsm/libs/draco/gltf/` (three.js r181) | Apache-2.0 | `public/draco/` | Self-hosted instead of `www.gstatic.com`. Licence text: https://github.com/google/draco/blob/master/LICENSE |
 | `studio_small_03_1k.hdr` ("Studio Small 03", Greg Zaal) | Poly Haven, https://polyhaven.com/a/studio_small_03 | CC0 1.0 | `public/hdri/` | Self-hosted instead of `raw.githack.com` (drei preset "studio"). No attribution required; given anyway. |
+| Inter (variable, latin / latin-ext) | https://rsms.me/inter/, files copied from the AT Medical website theme | SIL OFL 1.1 | `public/fonts/inter/` | Self-hosted, same files as the website. Licence text: `public/fonts/inter/OFL.txt`. |
+| Source Serif 4 (400 / 600, latin / latin-ext) | https://github.com/adobe-fonts/source-serif, files copied from the AT Medical website theme | SIL OFL 1.1 | `public/fonts/source-serif/` | Heading face of the AT Medical CI. Licence: https://openfontlicense.org/ |
+| AT Medical monogram (`favicon.svg`, header logo) | AT Medical GmbH (`ATMED-wordpress` theme `assets/at-monogramm.svg`, unchanged copy) | Proprietary, © AT Medical GmbH | `public/favicon.svg` | Company trademark: not covered by the MIT licence of this repository; do not reuse outside AT Medical channels. |
 
 ---
 

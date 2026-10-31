@@ -41,7 +41,7 @@ documented transparently.
 
 ### Explicitly out of scope for now
 
-Final AT Medical branding · Moodle integration · authentication / IAM / SSO ·
+Final brand identity (beyond the AT Medical layout and the name "Cell Explorer") · Moodle integration · authentication / IAM / SSO ·
 production deployment pipeline · real AI-tutor backend · analytics · user
 tracking · medical certification · full content redesign · commercial release.
 These are tracked as later phases in [`docs/ROADMAP.md`](docs/ROADMAP.md).

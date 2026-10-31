@@ -1056,7 +1056,7 @@ export function CellScene({
       }}
       camera={{ position: [0, 0.2, 5.8], fov: 38 }}
     >
-      {!nativeMaterial && <color attach="background" args={["#fbf7ee"]} />}
+      {!nativeMaterial && <color attach="background" args={["#151827"]} />}
       <Suspense fallback={null}>
         <Environment files={STUDIO_HDRI} background={false} environmentIntensity={nativeMaterial ? 0.75 : 0.5} />
       </Suspense>
