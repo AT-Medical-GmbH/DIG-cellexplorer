@@ -133,3 +133,10 @@ database change, no backend, nothing else to roll back.
 | 2026-10-09 | Headless Chromium on `vite preview`: HDRI + NIH model load same-origin; no third-party host | OK |
 | 2026-10-09 | Draco-compressed test model: decoder fetched from `/cellexplorer/draco/`, worker from `blob:` | OK |
 | 2026-10-10 | Tier-A-only build in a browser (procedural fallbacks, image placeholders, console) | **open — not yet run** |
+
+---
+
+## 9. Betrieb auf den eigenen Servern
+
+Build, Installation, Rückweg und der Umzug von GitHub sind in [`SERVER-BETRIEB.md`](SERVER-BETRIEB.md) beschrieben
+(Skripte unter `scripts/server/`). Abschnitt 1 und 2 oben bleiben als manuelle Referenz gültig.
