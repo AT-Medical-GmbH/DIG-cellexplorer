@@ -47,7 +47,7 @@ Konfiguration: `scripts/server/release.env.example` nach `/etc/atmed/cell-explor
 
 | # | Schritt | Prüfpunkt |
 | --- | --- | --- |
-| 1 | Vollständige Kopie ziehen: `git clone --mirror https://github.com/AT-Medical-GmbH/DIG-cellexplorer.git repo.git` (oder das mitgelieferte Git-Bundle: `git clone dig-cellexplorer.bundle`) | `git -C repo.git branch -a` zeigt `main` und `claude/dig-cellexplorer-init-i1f8al`; `git fsck` ohne Fehler |
+| 1 | Bare-Repository anlegen und füllen: `bash scripts/server/repo-init.sh --bundle dig-cellexplorer-2026-11-03.bundle` (oder `--from-github <https-Adresse>`); setzt `main` auf den Arbeitszweig und sperrt Löschen und Überschreiben von Verlauf | `git -C repo.git branch -a` zeigt `main` und `claude/dig-cellexplorer-init-i1f8al`; `git fsck` ohne Fehler |
 | 2 | Spiegel gegen GitHub abgleichen | `git ls-remote` beider Seiten liefert dieselben Commit-IDs |
 | 3 | `main` auf den Stand des Arbeitszweigs setzen (Schnellvorlauf, `main` ist Vorfahre): `git -C repo.git branch -f main claude/dig-cellexplorer-init-i1f8al` | `git log main` beginnt mit dem Merge von PR 18 oder neuer |
 | 4 | Medien-Tresor anlegen: `bash scripts/server/assets-vault-init.sh nc` (einmalig, braucht kurz Zugriff auf `raw.githubusercontent.com`) | `SHA256SUMS` im Tresor, Dateien wie in `docs/ASSET_REVIEW.md` |
@@ -80,16 +80,18 @@ gilt eine feste Kette, in der **keine Stufe übersprungen** wird:
 4. **Zusammenführen** per Commit in das Repository, danach `ci-local.sh`.
 5. **Release** nach Freigabe (Abschnitt 4).
 
-Zwei Arten von „Karten“ verlangen Unterschiedliches (siehe offene Entscheidung unten):
+Gewählter Umfang (2026-11-03): Weiterentwicklung der 3D-Oberfläche sowie Lernkarten und E-Learning-Einheiten.
 
-| Art | Was automatisierbar ist | Was nicht |
-| --- | --- | --- |
-| **Lernkarten und Wissensfragen** (Text: Frage, Antwort, Erklärung, Quelle) | Erzeugung, Schemaprüfung, Aufnahme in die App | Fachfreigabe |
-| **Weitere Präparate** (3D) | Texte, Organellenbeschreibungen, Quizfragen | 3D-Modelle: brauchen lizenzgeprüfte GLB-Dateien (NIH 3D, eigene Modelle); Aufnahme nur über `docs/ASSET_REVIEW.md` |
+| Bereich | Weg | Was automatisierbar ist | Was nicht |
+| --- | --- | --- | --- |
+| **3D-Oberfläche** (App) | normale Entwicklung: Commit im Server-Repository, `ci-local.sh`, Release nach Freigabe | Bau, Prüfung, Archiv, Installation, Rückweg | Entscheidung über Funktionen und Aussehen |
+| **Lernkarten** (Text: Frage, Antwort, Erklärung, Quelle) | Datenformat (JSON mit Schema) plus Kartenansicht in der App | Entwurf, Schemaprüfung, Aufnahme in die App | fachliche Freigabe |
+| **E-Learning-Einheiten** | vorhandene E-Learning-Produktion auf `ATMED-core` (Generator, Prüfstufe, Warteschlange) mit Import in Moodle | Entwurf und Maschinenprüfung | Freigabe der Musterurteile, Import erst nach Freigabe |
+| **Weitere 3D-Präparate** (später) | zusätzlich nötig: lizenzgeprüftes GLB-Modell | Begleittexte | Modelle, Aufnahme nur über `docs/ASSET_REVIEW.md` |
 
-Voraussetzung für beides: ein Datenformat außerhalb des Programmcodes (JSON je Karte/Präparat mit Schema) und ein
-Prüfskript. Die Umsetzung folgt nach der Entscheidung unten, damit sie nicht an der laufenden Inhaltsprüfung
-(`docs/INHALTSPRUEFUNG-DE.md`) vorbeiläuft.
+Voraussetzung für die Lernkarten in der App: ein Datenformat außerhalb des Programmcodes und ein Prüfskript. Das wird
+umgesetzt, sobald die laufende Inhaltsprüfung (`docs/INHALTSPRUEFUNG-DE.md`) abgestimmt ist, damit beide nicht
+gegeneinander an `src/data/cells.ts` arbeiten.
 
 ## 6. Abnahme (nach jeder Installation)
 
@@ -101,9 +103,16 @@ Prüfskript. Die Umsetzung folgt nach der Entscheidung unten, damit sie nicht an
 - [ ] Mobil (390 px) bedienbar.
 - [ ] Datenschutzerklärung nennt den lokalen Browser-Speicher (Entwurf: `docs/DATENSCHUTZ-ENTWURF.md`).
 
-## 7. Offene Entscheidungen
+## 7. Entscheidungen
 
-1. **Git-Host auf dem Server:** (a) einfaches Bare-Repository per SSH (wenig Betrieb, kein Web-Tracker) oder (b) Forgejo/Gitea (Weboberfläche, Issues, PRs, eigener Runner als Ersatz für Actions; ein weiterer zu pflegender Dienst). Neue Dienste gehören nach der Betriebsregel zuerst auf Staging, nicht auf den Produktionsserver.
-2. **Zielserver:** `ATMED-core` (dort läuft WordPress) oder getrennt (Build/Git auf `ATDIG-core`, Auslieferung auf `ATMED-core`).
-3. **GitHub nach dem Umzug:** Spiegel behalten, archivieren oder löschen (Schritt 9).
-4. **Was sind „weitere Karten“:** Lernkarten/Wissensfragen (Text) oder zusätzliche Präparate (3D).
+Getroffen am 2026-11-03 (Andreas Tremml, Chat):
+
+1. **Git-Host:** einfaches Bare-Repository per SSH auf `ATMED-core` (`scripts/server/repo-init.sh`). Kein zusätzlicher Webdienst. Der Tracker bleibt vorerst als Exportdokument im Repository; ein Forgejo-Betrieb kann später nach Staging-Test nachgezogen werden.
+2. **GitHub:** bleibt vorerst unverändert (nichts löschen, nichts archivieren). Eine spätere Abschaltung braucht eine eigene Freigabe und vorher den vollständigen Export der Issues.
+3. **Umfang der Automatisierung:** Weiterentwicklung der 3D-Oberfläche **und** ergänzend Lernkarten und E-Learning-Einheiten.
+
+Noch offen:
+
+- **SSH-Zugang für Schreibrechte** auf das Repository (welche Benutzer/Schlüssel dürfen pushen; Vorschlag: ein eigener Benutzer `git` ohne Shell-Login, Schlüssel nur für die Betreiber und die Server-Sitzung).
+- **Wer löst Releases aus** (Vorschlag: die Server-Sitzung `claude-code-atmed-core` nach ausdrücklicher Freigabe, nie automatisch).
+- **Anbindung an die bestehende E-Learning-Produktion** (Abschnitt 5): Aufnahme der Einheiten in Moodle läuft dort, nicht über die App.
